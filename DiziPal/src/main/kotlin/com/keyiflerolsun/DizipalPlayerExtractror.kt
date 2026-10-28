@@ -53,15 +53,14 @@ class DizipalPlayer : ExtractorApi() {
 
         val origin = Regex("""https?://[^/]+""").find(url)?.value ?: "https://$mainUrl"
 
-        // --- Altyazılar (eski biçim: "file":"...","label":"..." ) ---
         val subUrls = mutableSetOf<String>()
+
+        // --- Altyazılar (eski biçim: "file":"...","label":"..." ) ---
         Regex(""""file":"((?:\\"|[^"])+)","label":"((?:\\"|[^"])+)"""").findAll(response).forEach {
             val (subUrlExt, subLangExt) = it.destructured
 
             val subUrl = subUrlExt.replace("\\/", "/").replace("\\u0026", "&").replace("\\", "")
-            val subLang = subLangExt.replace("\\u0131", "ı").replace("\\u0130", "İ")
-                .replace("\\u00fc", "ü").replace("\\u00e7", "ç")
-                .replace("\\u011f", "ğ").replace("\\u015f", "ş")
+            val subLang = unescapeUnicode(subLangExt)
 
             if (!subUrls.add(subUrl)) return@forEach
 
@@ -71,6 +70,49 @@ class DizipalPlayer : ExtractorApi() {
                 }
             )
         }
+
+        // --- Altyazılar (yeni oynatıcı: "subtitles":[{"label":"Türkçe","lang":"tr","url":".../nsub.php?v=..."}] ) ---
+        val trackBase = Regex(""""track"\s*:\s*"([^"]+)"""")
+            .find(response)?.groupValues?.get(1)?.let { duzeltUrl(it) }
+
+        Regex(""""subtitles"\s*:\s*\[(.*?)\]""", RegexOption.DOT_MATCHES_ALL)
+            .find(response)?.groupValues?.get(1)
+            ?.let { blok ->
+                Regex("""\{[^{}]*\}""").findAll(blok).forEach { obj ->
+                    val item = obj.value
+
+                    var subUrl = Regex(""""url"\s*:\s*"([^"]+)"""")
+                        .find(item)?.groupValues?.get(1)?.let { duzeltUrl(it) }
+
+                    // Nadiren "url" yerine sadece "tok" geliyor -> track.php?v=<id>&b=<tok>
+                    if (subUrl == null) {
+                        val tok = Regex(""""tok"\s*:\s*"([^"]+)"""")
+                            .find(item)?.groupValues?.get(1)
+                        if (tok != null && trackBase != null) subUrl = "$trackBase&b=$tok"
+                    }
+                    if (subUrl == null) return@forEach
+
+                    val label = Regex(""""label"\s*:\s*"([^"]*)"""")
+                        .find(item)?.groupValues?.get(1)
+                        ?.let { unescapeUnicode(it) }
+                        ?.ifBlank { null }
+                        ?: Regex(""""lang"\s*:\s*"([^"]*)"""")
+                            .find(item)?.groupValues?.get(1)
+                        ?: "Altyazı"
+
+                    val forced = Regex(""""forced"\s*:\s*(true|false)""")
+                        .find(item)?.groupValues?.get(1)?.toBoolean() ?: false
+
+                    if (!subUrls.add(subUrl)) return@forEach
+
+                    Log.d("DiziPal", "--> altyazı: $label ($subUrl)")
+                    subtitleCallback.invoke(
+                        newSubtitleFile(lang = if (forced) "$label (zorunlu)" else label, url = subUrl) {
+                            headers = mapOf("Referer" to url, "User-Agent" to userAgent)
+                        }
+                    )
+                }
+            }
 
         // --- 1) Yeni oynatıcı: NP_CONFIG içindeki "master" adresi doğrudan m3u8 ---
         var linkEklendi = false
@@ -148,4 +190,10 @@ class DizipalPlayer : ExtractorApi() {
         if (!u.startsWith("http")) u = "https://$u"
         return u
     }
+
+    /** JSON içindeki \\uXXXX kaçışlarını gerçek karaktere çevirir (Türkçe altyazı etiketleri için). */
+    private fun unescapeUnicode(raw: String): String =
+        Regex("""\\u([0-9a-fA-F]{4})""").replace(raw) {
+            it.groupValues[1].toInt(16).toChar().toString()
+        }
 }

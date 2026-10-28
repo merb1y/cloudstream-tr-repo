@@ -383,12 +383,38 @@ class DiziPal : MainAPI() {
             }
             Log.d("DiziPal", "--> Extractor'a gönderilen Final URL: $iframeUrl")
 
+            var altyaziSayisi = 0
+            val altyaziSarmal: (SubtitleFile) -> Unit = { altyazi ->
+                altyaziSayisi++
+                subtitleCallback.invoke(altyazi)
+            }
+
             DizipalPlayer().getUrl(
                 url = iframeUrl,
                 referer = data,
-                subtitleCallback = subtitleCallback,
+                subtitleCallback = altyaziSarmal,
                 callback = callback
             )
+
+            // Kaynağın kendi altyazısı yoksa OpenSubtitles'tan (ücretsiz, anahtarsız) tamamla
+            if (altyaziSayisi == 0) {
+                val imdb = Regex("""tt\d{7,9}""").find(html)?.value
+                val baslik = Regex("""(?s)<h1[^>]*>(.*?)</h1>""")
+                    .find(html)?.groupValues?.get(1)
+                    ?.replace(Regex("<[^>]+>"), "")?.trim()
+                    ?.ifBlank { null }
+                    ?: Regex("""<title[^>]*>(.*?)</title>""")
+                        .find(html)?.groupValues?.get(1)
+                        ?.substringAfter("Dizipal ")?.substringBefore(" izle")?.trim()
+                val yil = Regex("""\\*"year\\*"\s*:\s*\\*"(\d{4})\\*"""")
+                    .find(html)?.groupValues?.get(1)?.toIntOrNull()
+                val sezonBolum = Regex("""-(\d+)x(\d+)(?:$|[/?#])""").find(data)
+                val sezon = sezonBolum?.groupValues?.get(1)?.toIntOrNull()
+                val bolum = sezonBolum?.groupValues?.get(2)?.toIntOrNull()
+
+                Log.d("DiziPal", "--> Ortak altyazı aranıyor: imdb=$imdb başlık=$baslik yıl=$yil ${sezon}x$bolum")
+                OrtakAltyazi.ekle(imdb, baslik, yil, sezon, bolum, subtitleCallback)
+            }
         } else {
             Log.e("DiziPal", "--> HATA: iframeUrl tamamen BOŞ. Video linki bulunamadı!")
         }

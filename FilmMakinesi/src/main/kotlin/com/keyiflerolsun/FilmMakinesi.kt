@@ -151,21 +151,37 @@ class FilmMakinesi : MainAPI() {
         val videoParts = document.select(".video-parts a[data-video_url]")
         Log.d(name, "Video part sayısı: ${videoParts.size}")
 
+        var altyaziSayisi = 0
+        val altyaziSarmal: (SubtitleFile) -> Unit = { altyazi ->
+            altyaziSayisi++
+            subtitleCallback.invoke(altyazi)
+        }
+
         if (videoParts.isNotEmpty()) {
             videoParts.forEachIndexed { index, part ->
                 val embedUrl = part.attr("data-video_url")
                 val label = part.text().trim()
                 Log.d(name, "Part #$index - label: '$label', url: '$embedUrl'")
                 if (embedUrl.isNotBlank()) {
-                    loadExtractor(embedUrl, data, subtitleCallback, callback)
+                    loadExtractor(embedUrl, data, altyaziSarmal, callback)
                 }
             }
         } else {
             val iframeSrc = document.selectFirst(".after-player iframe")?.attr("data-src")
             Log.d(name, "Fallback iframe: $iframeSrc")
             if (iframeSrc != null) {
-                loadExtractor(iframeSrc, data, subtitleCallback, callback)
+                loadExtractor(iframeSrc, data, altyaziSarmal, callback)
             }
+        }
+
+        // Kaynağın kendi altyazısı yoksa OpenSubtitles'tan (ücretsiz, anahtarsız) tamamla
+        if (altyaziSayisi == 0) {
+            val imdb = Regex("""tt\d{7,9}""").find(document.html())?.value
+            val baslik = document.selectFirst("h1.title")?.ownText()?.trim()
+                ?.removeSuffix(" izle")?.ifBlank { null }
+            val yil = document.selectFirst("h1.title .date a")?.text()?.toIntOrNull()
+            Log.d(name, "Ortak altyazı aranıyor: imdb=$imdb başlık=$baslik yıl=$yil")
+            OrtakAltyazi.ekle(imdb, baslik, yil, null, null, subtitleCallback)
         }
 
         Log.d(name, "loadLinks tamamlandı")
