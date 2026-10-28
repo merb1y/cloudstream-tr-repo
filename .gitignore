@@ -1,0 +1,17 @@
+# Gradle / derleme ciktilari
+.gradle/
+build/
+*/build/
+.kotlin/
+local.properties
+*.iml
+.idea/
+
+# Gecici loglar
+*.log
+
+# Test sirasinda olusan sinif dosyalari
+tools/out/
+
+build-*.txt
+
