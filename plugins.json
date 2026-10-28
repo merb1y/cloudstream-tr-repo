@@ -50,10 +50,10 @@
   {
     "internalName": "FilmMakinesi",
     "name": "FilmMakinesi",
-    "version": 1060,
+    "version": 1061,
     "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/FilmMakinesi.cs3",
-    "fileHash": "sha256-6535814b79fcf0544b6f4a77a7c9c0c2681b5c9a13461e77613ca2a0c018af12",
-    "fileSize": 42599,
+    "fileHash": "sha256-dee897ccc8f13a4a4e396c10b90bd610b2bf56a1c481f087183835b601efe048",
+    "fileSize": 47209,
     "status": 1,
     "apiVersion": 1,
     "language": "tr",
