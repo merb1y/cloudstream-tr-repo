@@ -294,6 +294,9 @@ class DiziBox : MainAPI() {
                 }
 
                 val subFrame = subDoc.selectFirst("div#Player iframe")?.attr("src") ?: return
+                if (subFrame.contains("vidmoly") || subFrame.contains("moly")) {
+                    tryExtractDirect(subFrame, "$mainUrl/", callback)
+                }
                 loadExtractor(subFrame, "$mainUrl/", subtitleCallback, callback)
             }
 
@@ -351,6 +354,9 @@ class DiziBox : MainAPI() {
                     )
                 } else {
                     val cleanEmbed = finalEmbed.replace("vidmoly.me", "vidmoly.net")
+                    if (cleanEmbed.contains("vidmoly") || cleanEmbed.contains("moly")) {
+                        tryExtractDirect(cleanEmbed, sourceUrl, callback)
+                    }
                     loadExtractor(cleanEmbed, sourceUrl, subtitleCallback, callback)
                 }
             }
@@ -359,5 +365,32 @@ class DiziBox : MainAPI() {
                 loadExtractor(iframeUrl, sourceUrl, subtitleCallback, callback)
             }
         }
+    }
+
+    private suspend fun tryExtractDirect(
+        embedUrl: String,
+        referer: String,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        try {
+            val resp = app.get(embedUrl, referer = referer, interceptor = interceptor).text
+            val m3u8Match = Regex("""(https?://[^\s'"]+\.m3u8[^\s'"]*)""").find(resp)?.groupValues?.get(1)
+            if (m3u8Match != null) {
+                callback.invoke(
+                    newExtractorLink(
+                        source = name,
+                        name = "VidMoly",
+                        url = m3u8Match,
+                        type = ExtractorLinkType.M3U8
+                    ) {
+                        this.headers = mapOf("Referer" to embedUrl)
+                        this.quality = Qualities.P1080.value
+                    }
+                )
+                return true
+            }
+        } catch (_: Throwable) {
+        }
+        return false
     }
 }
