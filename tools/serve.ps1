@@ -39,6 +39,14 @@ while ($listener.IsListening) {
             $json = [regex]::Replace($json, 'https?://[^"]*/plugins\.json', "${prefix}plugins.json")
             $bytes = (New-Object System.Text.UTF8Encoding($false)).GetBytes($json)
             $ctx.Response.ContentType = "application/json; charset=utf-8"
+        } elseif ($path -ieq "plugins.json") {
+            # Eklenti adreslerini de localhost'a çevir; dosya GitHub için hazır kalır
+            $base = $prefix.TrimEnd("/")
+            $json = [System.IO.File]::ReadAllText($file, [System.Text.Encoding]::UTF8)
+            $json = [regex]::Replace($json, 'https?://[^"\s]*/plugins/([^"\s]+\.(?:cs3|jar))', "${prefix}plugins/`$1")
+            $json = [regex]::Replace($json, '("repositoryUrl"\s*:\s*")[^"]*(")', "`${1}$base`${2}")
+            $bytes = (New-Object System.Text.UTF8Encoding($false)).GetBytes($json)
+            $ctx.Response.ContentType = "application/json; charset=utf-8"
         } else {
             $bytes = [System.IO.File]::ReadAllBytes($file)
             $ext = [System.IO.Path]::GetExtension($file).ToLower()

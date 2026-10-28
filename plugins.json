@@ -34,10 +34,10 @@
   {
     "internalName": "DiziPal",
     "name": "DiziPal",
-    "version": 1117,
+    "version": 1118,
     "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/DiziPal.cs3",
-    "fileHash": "sha256-b01ac087757d7e4a9f2ca427ab84a7b16e4fa59802f02eef755132f022a52c63",
-    "fileSize": 31620,
+    "fileHash": "sha256-800324ae7729c897a6ad09c06f3624afe3294018e9920156218b8b7a2f952dcb",
+    "fileSize": 32826,
     "status": 1,
     "apiVersion": 1,
     "language": "tr",
