@@ -112,6 +112,22 @@
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
+    "internalName": "DomatesTV",
+    "name": "DomatesTV",
+    "version": 1,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/DomatesTV.cs3",
+    "fileHash": "sha256-9315824fc33e6b3881639d81158b290c2dac7a39a67bfb23828cd7d759566f99",
+    "fileSize": 10822,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "Domates TV & ArdaSpor - Kesintisiz Hızlı beIN Sports ve Canlı Maç Yayınları",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports4.png",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
     "internalName": "HaberTV",
     "name": "HaberTV",
     "version": 1,
@@ -160,6 +176,38 @@
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
+    "internalName": "NetSpor",
+    "name": "NetSpor",
+    "version": 1,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/NetSpor.cs3",
+    "fileHash": "sha256-7ee96d3c063daf4751c2a413bf8c7e9c544168202b05dd3bc562390f0e6b08af",
+    "fileSize": 10837,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "NetSpor & MahsunSports - 1080p beIN Sports 1-5 ve Canlı Spor Yayınları",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports3.png",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
+    "internalName": "SelcukSports",
+    "name": "SelcukSports",
+    "version": 1,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/SelcukSports.cs3",
+    "fileHash": "sha256-29243755a0a35e47dc3c42049e59baadcd76d4a582278e17e8a14d3ecf61cade",
+    "fileSize": 11135,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "SelçukSports - Canlı beIN Sports 1-5, S Sport, Tivibu, Smart Spor ve Kesintisiz Maç Yayınları",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports1.png",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
     "internalName": "SporTV",
     "name": "SporTV",
     "version": 3,
@@ -173,6 +221,22 @@
     "description": "SporTV - Kesintisiz Canlı Spor Kanalları (beIN Sports 1-5, S Sport 1-2, Tivibu, Smart, Tabii, TRT Spor, A Spor)",
     "tvTypes": ["Live"],
     "iconUrl": "https://raw.githubusercontent.com/Wiojelt/TurkSpor/main/assets/providers/WioSpor.png",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
+    "internalName": "Taraftarium24",
+    "name": "Taraftarium24",
+    "version": 1,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/Taraftarium24.cs3",
+    "fileHash": "sha256-5badc292c61a6012356b4a5202a2a5b3faaa9393b0f5fb4f28389f2fd5d44ecb",
+    "fileSize": 11008,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "Taraftarium24 - Canlı Maç ve Spor Yayınları (beIN Sports, S Sport, Tivibu)",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports2.png",
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
