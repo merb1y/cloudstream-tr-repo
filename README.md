@@ -1,20 +1,44 @@
-# Kendi CloudStream Repon
+# Merby Türkçe CloudStream Repo
 
-Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve test edilmiş 7 gerçek
-eklenti** + 1 demo eklenti var.
+Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitelere/yayınlara karşı doğrulanmış 20 gerçek eklenti** yer alır (4 Canlı TV, 10+ Dizi, 8+ Film, 4 Anime/Asya).
 
 ## Depodaki eklentiler
 
+### Canlı TV (4 kaynak)
 | Eklenti | Sürüm | Tür | Ne yapar |
 |---|---|---|---|
+| CanliTV | 1010 | Canlı TV | Ulusal ve TRT kanalları (m3u listesi) |
+| AcikTV | 1001 | Canlı TV | iptv-org Türkiye canlı kanal listesi (172 kanal, Türkçe kategorili) |
+| TurkiyeTV | 1001 | Canlı TV | Free-TV Türkiye canlı yayın listesi (TRT ve ulusal kanallar) |
+| DunyaTV | 1001 | Canlı TV | iptv-org Türkçe yayın yapan uluslararası kanallar |
+
+### Dizi & Belgesel
+| Eklenti | Sürüm | Tür | Ne yapar |
+|---|---|---|---|
+| DiziPal | 1120 | Dizi, Film | Yabancı/yerli dizi + film arşivi (gömülü + OpenSubtitles altyazı) |
 | DiziBox | 1025 | Dizi | Yabancı diziler (dizibox.live) |
-| DiziPal | 1117 | Dizi, Film | Dizi + film arşivi (dizipal1592.com) |
-| FilmMakinesi | 1059 | Film | Film arşivi (filmmakinesi.to) |
-| HDFilmCehennemi | 1058 | Film, Dizi | Film + dizi (hdfilmcehennemi.nl) |
-| InatBox | 1030 | Film, Dizi, Canlı | InatBox içerikleri |
-| RecTV | 1116 | Film, Dizi, Canlı | RecTV (HMAC imzalı API) |
-| CanliTV | 1010 | Canlı TV | Türk kanalları (m3u listesi) |
-| OrnekDizi | 1 | Film (demo) | Repo kurulumunu test etmek için |
+| DiziYou | 1026 | Dizi | Yabancı dizi arşivi (Türkçe dublaj & altyazı) |
+| DiziPod | 1003 | Dizi, Film | Dizi ve film içerikleri |
+| Ddizi | 1024 | Dizi | Yerli diziler ve güncel televizyon bölümleri (ddizi.im) |
+| DiziBal | 1001 | Dizi, Film, Anime | Yabancı dizi, film ve anime arşivi |
+| DMax | 1002 | Dizi / Belgesel | DMAX Türkiye program ve belgesel bölümleri (dmax.com.tr) |
+| TLCtr | 1019 | Dizi / Program | TLC Türkiye program ve bölümleri (tlctv.com.tr) |
+
+### Film
+| Eklenti | Sürüm | Tür | Ne yapar |
+|---|---|---|---|
+| HDFilmCehennemi | 1058 | Film, Dizi | Film + dizi arşivi (hdfilmcehennemi.nl, altyazı destekli) |
+| FilmMakinesi | 1061 | Film | Film arşivi (filmmakinesi.to, CloseLoad doğrudan HLS + altyazı) |
+| FilmModu | 1019 | Film | HD film arşivi (filmmodu) |
+| FullHDFilm | 1036 | Film, Dizi | Full HD film ve dizi izleme sitesi |
+| KultFilmler | 1016 | Film, Dizi | Kült ve sanat filmleri arşivi (kultfilmler.net) |
+
+### Anime & Asya Dizileri
+| Eklenti | Sürüm | Tür | Ne yapar |
+|---|---|---|---|
+| AnimeciX | 1021 | Anime | Türkçe anime izleme ve keşif platformu |
+| KoreanTurk | 1006 | Asya Dizisi, Film | Kore dizileri ve filmleri (koreanturk) |
+| WebdramaTurkey2 | 1001 | Asya Dizisi, Anime | Asya dizileri, filmleri ve animeleri |
 
 Hepsi açık kaynak (GPL-3.0) `feroxx/Kekik-cloudstream` deposundan alınmıştır.
 Lisans ve atıf detayları: [`LICENSE-NOTICE.md`](LICENSE-NOTICE.md)
