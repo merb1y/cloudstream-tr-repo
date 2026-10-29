@@ -39,6 +39,7 @@ class DiziBox : MainAPI() {
 
     init {
         MolyStreamProxy.patchDnsForLocalhost()
+        MolyStreamProxy.proxyImage("https://www.dizibox.live/favicon.ico")
     }
 
     class CloudflareInterceptor(
@@ -96,6 +97,7 @@ class DiziBox : MainAPI() {
 
         val home = document.select("article.detailed-article, article.article-episode-card a.figure-link")
             .mapNotNull { it.toMainPageResult() }
+            .distinctBy { it.url }
 
         val isHorizontal = request.name.contains("Bölümler") || request.name.contains("Popüler")
         return newHomePageResponse(listOf(HomePageList(request.name, home, isHorizontal)), home.isNotEmpty())
@@ -103,20 +105,21 @@ class DiziBox : MainAPI() {
 
     private fun Element.toMainPageResult(): SearchResponse? {
         val titleEl = this.selectFirst("h3 a")
-        val title   = titleEl?.text() ?: this.selectFirst("img")?.attr("alt") ?: return null
-        val imgEl   = this.selectFirst("img")
-        val rawSrc  = imgEl?.attr("data-src")?.takeIf { it.isNotBlank() }
-            ?: imgEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() }
-            ?: imgEl?.attr("data-original")?.takeIf { it.isNotBlank() }
+        val imgEl   = this.selectFirst("img.afis, img.main-cover, figure img, img:not(.language-flag)")
+            ?: this.selectFirst("img")
+        val title   = titleEl?.text() ?: imgEl?.attr("alt") ?: return null
+        val rawSrc  = imgEl?.attr("data-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
+            ?: imgEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
+            ?: imgEl?.attr("data-original")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
             ?: imgEl?.attr("src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-        val imgUrl  = fixUrlNull(rawSrc)
+        val imgUrl  = MolyStreamProxy.proxyImage(fixUrlNull(rawSrc))
         val href    = fixUrlNull(titleEl?.attr("href") ?: this.attr("href")) ?: return null
         val rating  = this.selectFirst("span.label-imdb b")?.text()?.trim()
 
         return newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
             this.posterUrl = imgUrl
             this.posterHeaders = mapOf(
-                "User-Agent" to USER_AGENT,
+                "User-Agent" to userAgent,
                 "Referer"    to "$mainUrl/"
             )
             this.score     = Score.from10(rating)
@@ -147,9 +150,13 @@ class DiziBox : MainAPI() {
         return json.results.mapNotNull { result ->
             val thumbnail = result.attachmentThumbnail?.replace("50x50", "200x290")
             newTvSeriesSearchResponse(result.postTitle, result.permalink, TvType.TvSeries) {
-                this.posterUrl = fixUrlNull(thumbnail)
+                this.posterUrl = MolyStreamProxy.proxyImage(fixUrlNull(thumbnail))
+                this.posterHeaders = mapOf(
+                    "User-Agent" to userAgent,
+                    "Referer"    to "$mainUrl/"
+                )
             }
-        }
+        }.distinctBy { it.url }
     }
 
     override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)
@@ -173,11 +180,11 @@ class DiziBox : MainAPI() {
 
         val title    = document.selectFirst("div.tv-overview h1 a")?.text()?.trim() ?: return null
         val posterEl = document.selectFirst("div.tv-overview figure img")
-        val rawPoster = posterEl?.attr("data-src")?.takeIf { it.isNotBlank() }
-            ?: posterEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() }
-            ?: posterEl?.attr("data-original")?.takeIf { it.isNotBlank() }
+        val rawPoster = posterEl?.attr("data-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
+            ?: posterEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
+            ?: posterEl?.attr("data-original")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
             ?: posterEl?.attr("src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-        val poster   = fixUrlNull(rawPoster)
+        val poster   = MolyStreamProxy.proxyImage(fixUrlNull(rawPoster))
         val plot     = document.selectFirst("div.tv-story p")?.text()?.trim()
         val year     = document.selectFirst("a[href*='/yil/']")?.text()?.trim()?.toIntOrNull()
         val tags     = document.select("a[href*='/tur/']").map { it.text() }
@@ -242,7 +249,7 @@ class DiziBox : MainAPI() {
         return newTvSeriesLoadResponse(title, url, TvType.TvSeries, sortedEpisodes) {
             this.posterUrl = poster
             this.posterHeaders = mapOf(
-                "User-Agent" to USER_AGENT,
+                "User-Agent" to userAgent,
                 "Referer"    to "$mainUrl/"
             )
             this.plot      = plot
@@ -338,7 +345,7 @@ class DiziBox : MainAPI() {
                     playerUrl,
                     referer     = sourceUrl,
                     headers     = mapOf(
-                        "User-Agent"     to USER_AGENT,
+                        "User-Agent"     to userAgent,
                         "Referer"        to sourceUrl,
                         "Sec-Fetch-Dest" to "iframe",
                         "Sec-Fetch-Mode" to "navigate",
@@ -370,7 +377,7 @@ class DiziBox : MainAPI() {
                         sheila,
                         referer     = finalEmbed,
                         headers     = mapOf(
-                            "User-Agent"     to USER_AGENT,
+                            "User-Agent"     to userAgent,
                             "Referer"        to finalEmbed,
                             "Sec-Fetch-Dest" to "empty",
                             "Sec-Fetch-Mode" to "cors"

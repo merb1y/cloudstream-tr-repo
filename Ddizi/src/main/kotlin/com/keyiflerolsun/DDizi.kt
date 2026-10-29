@@ -68,7 +68,7 @@ class DDizi : MainAPI() {
         }
     
         val hasNextPage = document.selectFirst(".pagination a:contains(Sonraki)") != null
-        return newHomePageResponse(request.name, home, hasNextPage)
+        return newHomePageResponse(request.name, home.distinctBy { it.url }, hasNextPage)
     }
 
     private fun Element.toSearchResult(): SearchResponse? {

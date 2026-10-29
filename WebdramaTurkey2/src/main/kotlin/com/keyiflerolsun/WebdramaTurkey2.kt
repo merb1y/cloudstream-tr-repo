@@ -57,7 +57,7 @@ class WebdramaTurkey2 : MainAPI() {
         } else {
             document.select("div.col")
                 .mapNotNull { it.toMainPageResult() }
-        }
+        }.distinctBy { it.url }
 
         return newHomePageResponse(request.name, home)
     }
@@ -137,6 +137,7 @@ class WebdramaTurkey2 : MainAPI() {
 
         return document.select("div.tab-pane:not(#actors) div.col")
             .mapNotNull { it.toSearchResult() }
+            .distinctBy { it.url }
     }
 
     override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)

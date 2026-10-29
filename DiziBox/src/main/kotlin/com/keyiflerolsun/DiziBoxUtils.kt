@@ -87,7 +87,11 @@ object MolyStreamProxy {
         serverSocket?.let { if (!it.isClosed) return it.localPort }
         synchronized(this) {
             serverSocket?.let { if (!it.isClosed) return it.localPort }
-            val ss = ServerSocket(0, 64, InetAddress.getByName("127.0.0.1"))
+            val ss = try {
+                ServerSocket(18765, 64, InetAddress.getByName("127.0.0.1"))
+            } catch (_: Throwable) {
+                ServerSocket(0, 64, InetAddress.getByName("127.0.0.1"))
+            }
             serverSocket = ss
             executor.execute {
                 while (!ss.isClosed) {
@@ -106,6 +110,14 @@ object MolyStreamProxy {
             }
             return ss.localPort
         }
+    }
+
+    fun proxyImage(imageUrl: String?): String? {
+        if (imageUrl.isNullOrBlank()) return null
+        if (imageUrl.startsWith("http://127.0.0.1:")) return imageUrl
+        val port = ensureServer()
+        val u = URLEncoder.encode(imageUrl, "UTF-8")
+        return "http://127.0.0.1:$port/poster.jpg?u=$u"
     }
 
     fun proxyPlaylist(playlistUrl: String, referer: String): String {
@@ -163,7 +175,28 @@ object MolyStreamProxy {
             val referer = query["r"] ?: "https://dbx.molystream.org/"
             val origin = Regex("""^(https?://[^/]+)""").find(referer)?.groupValues?.get(1) ?: "https://dbx.molystream.org"
 
-            if (path.endsWith(".m3u8")) {
+            if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".webp")) {
+                val req = Request.Builder()
+                    .url(targetUrl)
+                    .header("User-Agent", UA)
+                    .header("Referer", "https://www.dizibox.live/")
+                    .header("Cookie", "LockUser=true; isTrustedUser=true; dbxu=1744054959089")
+                    .build()
+
+                httpClient.newCall(req).execute().use { resp ->
+                    val bytes = resp.body.bytes()
+                    val ct = resp.header("Content-Type") ?: "image/jpeg"
+                    val header = "HTTP/1.1 200 OK\r\n" +
+                        "Content-Type: $ct\r\n" +
+                        "Content-Length: ${bytes.size}\r\n" +
+                        "Cache-Control: public, max-age=86400\r\n" +
+                        "Access-Control-Allow-Origin: *\r\n" +
+                        "Connection: close\r\n\r\n"
+                    out.write(header.toByteArray(Charsets.ISO_8859_1))
+                    out.write(bytes)
+                    out.flush()
+                }
+            } else if (path.endsWith(".m3u8")) {
                 val req = Request.Builder()
                     .url(targetUrl)
                     .header("User-Agent", UA)
