@@ -1,18 +1,9 @@
-version = 1026
-
+version = 1027
 cloudstream {
-    authors     = listOf("keyiflerolsun")
+    authors     = listOf("Wiojelt", "keyiflerolsun")
     language    = "tr"
-    description = "Diziyou en kaliteli TÃ¼rkÃ§e dublaj ve altyazÄ±lÄ± yabancÄ± dizi izleme sitesidir. GÃ¼ncel ve efsanevi dizileri 1080p Full HD kalitede izlemek iÃ§in hemen tÄ±kla!"
-
-    /**
-     * Status int as the following:
-     * 0: Down
-     * 1: Ok
-     * 2: Slow
-     * 3: Beta only
-    **/
-    status  = 1 // will be 3 if unspecified
-    tvTypes = listOf("TvSeries")
-    iconUrl = "https://cdn.diziyou.one/wp-content/uploads/2020/04/diziyou-favicon.png"
+    description = "DiziYou - 1150+ dizi ve doÄŸrudan 1080p M3U8 hÄ±zlÄ± oynatÄ±cÄ±"
+    status      = 1
+    tvTypes     = listOf("TvSeries")
+    iconUrl     = "https://www.google.com/s2/favicons?domain=www.diziyou.one&sz=128"
 }

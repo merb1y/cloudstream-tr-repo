@@ -22,9 +22,9 @@ class DiziBox : MainAPI() {
     override val hasQuickSearch       = true
     override val supportedTypes       = setOf(TvType.TvSeries)
 
-    override var sequentialMainPage            = true
-    override var sequentialMainPageDelay       = 50L
-    override var sequentialMainPageScrollDelay = 50L
+    override var sequentialMainPage            = false
+    override var sequentialMainPageDelay       = 0L
+    override var sequentialMainPageScrollDelay = 0L
 
     private val userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
 
@@ -65,16 +65,7 @@ class DiziBox : MainAPI() {
         "${mainUrl}/tum-bolumler/page/SAYFA/"                        to "Son Bölümler",
         "${mainUrl}/tum-bolumler/page/SAYFA/?tip=populer"            to "Popüler Diziler",
         "${mainUrl}/dizi-arsivi/page/SAYFA/"                         to "Yeni Eklenenler",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?ulke[]=turkiye&yil=&imdb" to "Yerli Diziler",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=aksiyon&yil&imdb" to "Aksiyon",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=bilimkurgu&yil&imdb" to "Bilimkurgu",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=komedi&yil&imdb"  to "Komedi",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=dram&yil&imdb"    to "Dram",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=fantastik&yil&imdb" to "Fantastik",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=gerilim&yil&imdb" to "Gerilim",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=korku&yil&imdb"   to "Korku",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=romantik&yil&imdb" to "Romantik",
-        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=animasyon&yil&imdb" to "Animasyon"
+        "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=aksiyon&yil&imdb" to "Aksiyon & Macera"
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
@@ -178,13 +169,21 @@ class DiziBox : MainAPI() {
             fixUrlNull(it.attr("href"))
         }
 
+        val allSeasonDocs = seasonLinks.amap { seasonUrl ->
+            try {
+                app.get(
+                    seasonUrl,
+                    cookies     = baseCookies,
+                    interceptor = interceptor,
+                    cacheTime   = 120
+                ).document
+            } catch (_: Throwable) {
+                null
+            }
+        }.filterNotNull()
+
         val episodeList = mutableListOf<Episode>()
-        seasonLinks.forEach { seasonUrl ->
-            val seasonDoc = app.get(
-                seasonUrl,
-                cookies     = baseCookies,
-                interceptor = interceptor
-            ).document
+        allSeasonDocs.forEach { seasonDoc ->
 
             seasonDoc.select("article.grid-box").forEach epLoop@{ epElem ->
                 val epTitleEl = epElem.selectFirst("div.post-title a.season-episode") ?: return@epLoop
@@ -244,24 +243,31 @@ class DiziBox : MainAPI() {
         ).document
 
         val iframeUrl = document.selectFirst("div#video-area iframe")?.attr("src")
-            ?: return false
 
-        processIframe(iframeUrl, data, data, subtitleCallback, callback)
+        val altOptions = document.select("div.video-toolbar option[value]")
+            .mapNotNull { fixUrlNull(it.attr("value")) }
+            .filter { it != data }
+            .take(3)
 
-        document.select("div.video-toolbar option[value]").forEach { opt ->
-            val altUrl = fixUrlNull(opt.attr("value")) ?: return@forEach
-            if (altUrl == data) return@forEach
+        // Alternatif oynatıcıları (VidMoly vb.) önce tara ki doğrudan çalışan 1080p yayın ilk sırada açılsın
+        altOptions.amap { altUrl ->
+            try {
+                val sourceDoc = app.get(
+                    altUrl,
+                    cookies     = baseCookies,
+                    interceptor = interceptor,
+                    cacheTime   = 60
+                ).document
 
-            val sourceDoc = app.get(
-                altUrl,
-                cookies     = baseCookies,
-                interceptor = interceptor
-            ).document
+                val srcIframe = sourceDoc.selectFirst("div#video-area iframe")?.attr("src")
+                if (srcIframe != null) {
+                    processIframe(srcIframe, altUrl, data, subtitleCallback, callback)
+                }
+            } catch (_: Throwable) {}
+        }
 
-            val srcIframe = sourceDoc.selectFirst("div#video-area iframe")?.attr("src")
-                ?: return@forEach
-
-            processIframe(srcIframe, altUrl, data, subtitleCallback, callback)
+        if (iframeUrl != null) {
+            processIframe(iframeUrl, data, data, subtitleCallback, callback)
         }
 
         return true
@@ -294,6 +300,9 @@ class DiziBox : MainAPI() {
                 }
 
                 val subFrame = subDoc.selectFirst("div#Player iframe")?.attr("src") ?: return
+                if (subFrame.contains("vidmoly") || subFrame.contains("moly")) {
+                    tryExtractDirect(subFrame, "$mainUrl/", callback)
+                }
                 loadExtractor(subFrame, "$mainUrl/", subtitleCallback, callback)
             }
 
@@ -351,6 +360,9 @@ class DiziBox : MainAPI() {
                     )
                 } else {
                     val cleanEmbed = finalEmbed.replace("vidmoly.me", "vidmoly.net")
+                    if (cleanEmbed.contains("vidmoly") || cleanEmbed.contains("moly")) {
+                        tryExtractDirect(cleanEmbed, sourceUrl, callback)
+                    }
                     loadExtractor(cleanEmbed, sourceUrl, subtitleCallback, callback)
                 }
             }
@@ -359,5 +371,32 @@ class DiziBox : MainAPI() {
                 loadExtractor(iframeUrl, sourceUrl, subtitleCallback, callback)
             }
         }
+    }
+
+    private suspend fun tryExtractDirect(
+        embedUrl: String,
+        referer: String,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        try {
+            val resp = app.get(embedUrl, referer = referer, interceptor = interceptor).text
+            val m3u8Match = Regex("""(https?://[^\s'"]+\.m3u8[^\s'"]*)""").find(resp)?.groupValues?.get(1)
+            if (m3u8Match != null) {
+                callback.invoke(
+                    newExtractorLink(
+                        source = name,
+                        name = "VidMoly (1080p Full HD)",
+                        url = m3u8Match,
+                        type = ExtractorLinkType.M3U8
+                    ) {
+                        this.headers = mapOf("Referer" to embedUrl)
+                        this.quality = Qualities.P1080.value
+                    }
+                )
+                return true
+            }
+        } catch (_: Throwable) {
+        }
+        return false
     }
 }

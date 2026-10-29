@@ -5,7 +5,7 @@ rootProject.name = "OrnekCloudStreamRepo"
 val disabled = listOf("tools", "gradle", "plugins", "build")
 
 File(rootDir, ".").eachDir { dir ->
-    if (!disabled.contains(dir.name) && File(dir, "build.gradle.kts").exists()) {
+    if (!disabled.contains(dir.name) && File(dir, "build.gradle.kts").exists() && File(dir, "src").exists()) {
         include(dir.name)
     }
 }
