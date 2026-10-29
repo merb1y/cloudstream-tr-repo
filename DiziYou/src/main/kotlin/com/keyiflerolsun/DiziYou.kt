@@ -25,8 +25,21 @@ class DiziYou : MainAPI() {
                 "${mainUrl}/page/$page/"
             }
             val document = app.get(url).document
-            val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a, ul.alphabetical-category-list li a")
-            val list = items.mapNotNull { it.toSearchResult() }.distinctBy { it.url }
+            val items = document.select("a:has(img)")
+            val list = items.mapNotNull { a ->
+                val img = a.selectFirst("img") ?: return@mapNotNull null
+                val poster = fixUrlNull(img.attr("data-src").takeIf { it.isNotBlank() } ?: img.attr("src"))
+                if (poster == null || (!poster.endsWith(".webp") && !poster.endsWith(".jpg") && !poster.endsWith(".png"))) return@mapNotNull null
+                if (poster.contains("altyazi") || poster.contains("dubalt") || poster.contains("english") || poster.contains("logo") || poster.contains("flag")) return@mapNotNull null
+                val href = fixUrlNull(a.attr("href")) ?: return@mapNotNull null
+                if (!href.startsWith("http") || href.contains("/wp-") || href.contains("/page/")) return@mapNotNull null
+                val title = a.attr("title").ifBlank { img.attr("alt").ifBlank { a.text().trim() } }.ifBlank { return@mapNotNull null }
+
+                newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
+                    this.posterUrl = poster
+                }
+            }.distinctBy { it.url }
+
             val hasNext = document.select("a.next, a[href*='/page/${page + 1}/']").isNotEmpty()
             newHomePageResponse(request.name, list, hasNext = hasNext)
         } catch (e: Throwable) {
@@ -37,7 +50,7 @@ class DiziYou : MainAPI() {
     override suspend fun search(query: String): List<SearchResponse> {
         return try {
             val document = app.get("${mainUrl}/?s=${query}").document
-            val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a, div.search-results a, ul.alphabetical-category-list li a")
+            val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a, div.search-results a, ul.alphabetical-category-list li a, a:has(img)")
             items.mapNotNull { it.toSearchResult() }.distinctBy { it.url }
         } catch (e: Throwable) {
             emptyList()
@@ -60,7 +73,18 @@ class DiziYou : MainAPI() {
     }
 
     override suspend fun load(url: String): LoadResponse? {
-        val document = app.get(url).document
+        val seriesUrl = if (url.contains("-sezon-") && url.contains("-bolum")) {
+            Regex("""https?://[^/]+/([^/]+)-\d+-sezon-\d+-bolum/?$""").find(url)?.groupValues?.get(1)?.let { slug ->
+                "$mainUrl/$slug/"
+            } ?: url
+        } else url
+
+        val document = try {
+            app.get(seriesUrl).document
+        } catch (_: Throwable) {
+            app.get(url).document
+        }
+
         val title = document.selectFirst("h1")?.text()?.trim()
             ?.removeSuffix(" izle")
             ?.removeSuffix(" - Türkçe Dublaj & Altyazılı | Diziyou")
@@ -85,6 +109,17 @@ class DiziYou : MainAPI() {
 
             episodes.add(newEpisode(epHref) {
                 this.name = epText.ifBlank { "Bölüm $eNum" }
+                this.season = sNum
+                this.episode = eNum
+            })
+        }
+
+        // Always ensure at least one episode exists if loaded directly from an episode page
+        if (episodes.isEmpty()) {
+            val sNum = Regex("""(\d+)-sezon-(\d+)-bolum""").find(url)?.groupValues?.get(1)?.toIntOrNull() ?: 1
+            val eNum = Regex("""(\d+)-sezon-(\d+)-bolum""").find(url)?.groupValues?.get(2)?.toIntOrNull() ?: 1
+            episodes.add(newEpisode(url) {
+                this.name = "$sNum. Sezon $eNum. Bölüm"
                 this.season = sNum
                 this.episode = eNum
             })
@@ -116,7 +151,7 @@ class DiziYou : MainAPI() {
             callback.invoke(
                 newExtractorLink(
                     source = name,
-                    name = "DiziYou",
+                    name = "DiziYou (1080p)",
                     url = m3u8Match,
                     type = ExtractorLinkType.M3U8
                 ) {

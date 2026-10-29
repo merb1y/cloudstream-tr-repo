@@ -12,6 +12,10 @@ class NetSpor : MainAPI() {
     override val hasDownloadSupport = false
     override val supportedTypes = setOf(TvType.Live)
 
+    override val mainPage = mainPageOf(
+        "" to "NetSpor Canli Yayinlar"
+    )
+
     private val ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
 
     data class AlternativeLink(val name: String, val url: String, val referer: String = "", val origin: String = "")
@@ -33,7 +37,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports1/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports1.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein1.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -51,7 +55,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports 2 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports2/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports2.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein2.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -68,7 +72,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports 3 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports3/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports3.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein3.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -84,7 +88,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports 4 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports4/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports4.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein4.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -100,7 +104,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports 5 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports5/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports5.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein5.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -114,7 +118,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports Max 1 HD",
             url = "https://andro.evrenesoglu219.click/checklist/androstreamlivebsm1.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports1.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein1.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://mahsunsports55.xyz/",
             origin = "https://mahsunsports55.xyz",
@@ -127,7 +131,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "beIN Sports Max 2 HD",
             url = "https://andro.evrenesoglu219.click/checklist/androstreamlivebsm2.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports2.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein2.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://mahsunsports55.xyz/",
             origin = "https://mahsunsports55.xyz",
@@ -142,7 +146,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "S Sport 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/ssport.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/ssport1.png",
             category = "Özel Spor Kanalları",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -156,7 +160,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "S Sport 2 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport2/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/ssport2.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/ssport2.png",
             category = "Özel Spor Kanalları",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -170,7 +174,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "Tivibu Spor 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktivibuspor/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/tivibuspor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tivibu1.png",
             category = "Özel Spor Kanalları",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -183,7 +187,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "Smart Spor 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuksmartspor/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/smartspor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/smart1.png",
             category = "Özel Spor Kanalları",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -196,7 +200,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "Tabii Spor 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktabiispor/playlist.m3u8",
-            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/tabiispor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tabii.png",
             category = "Özel Spor Kanalları",
             referer = "https://www.selcuksportshd1846.xyz/",
             origin = "https://www.selcuksportshd1846.xyz",
@@ -210,19 +214,19 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "TRT 1 HD (Canlı Maç & UEFA)",
             url = "https://tv-trt1.medya.trt.com.tr/master.m3u8",
-            poster = "https://i.ibb.co/L5rK5gG/trt1.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/trt1.png",
             category = "Ulusal Spor & Canlı Maç"
         ),
         ChannelItem(
             name = "A Spor HD",
             url = "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8",
-            poster = "https://i.ibb.co/vzR0j4x/aspor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/aspor.png",
             category = "Ulusal Spor & Canlı Maç"
         ),
         ChannelItem(
             name = "TRT Spor HD",
             url = "https://trt.daioncdn.net/trtspor/master.m3u8?app=web&platform=trtspor",
-            poster = "https://i.ibb.co/7Xk7yWn/trtspor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/trtspor.png",
             category = "Ulusal Spor & Canlı Maç"
         ),
         ChannelItem(
@@ -240,7 +244,7 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "TJK TV HD",
             url = "https://tjktv-live.tjk.org/tjktv.m3u8",
-            poster = "https://i.ibb.co/b3T62m2/tjktv.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/htspor.png",
             category = "Ulusal Spor & Canlı Maç"
         )
     )

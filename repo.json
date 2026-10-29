@@ -1,6 +1,6 @@
 {
-  "name": "Merby Türkçe Repo",
-  "description": "Doğrulanmış Türkçe Film, Dizi, Anime ve Canlı TV CloudStream Eklentileri",
+  "name": "Merby TÃ¼rkÃ§e Repo",
+  "description": "Kendi CloudStream eklentilerim",
   "manifestVersion": 1,
   "pluginLists": [
     "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins.json"

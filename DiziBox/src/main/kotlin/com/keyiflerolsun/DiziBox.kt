@@ -105,12 +105,20 @@ class DiziBox : MainAPI() {
         val titleEl = this.selectFirst("h3 a")
         val title   = titleEl?.text() ?: this.selectFirst("img")?.attr("alt") ?: return null
         val imgEl   = this.selectFirst("img")
-        val imgUrl  = fixUrlNull(imgEl?.attr("src")?.takeIf { it.isNotBlank() } ?: imgEl?.attr("data-src"))
+        val rawSrc  = imgEl?.attr("data-src")?.takeIf { it.isNotBlank() }
+            ?: imgEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() }
+            ?: imgEl?.attr("data-original")?.takeIf { it.isNotBlank() }
+            ?: imgEl?.attr("src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
+        val imgUrl  = fixUrlNull(rawSrc)
         val href    = fixUrlNull(titleEl?.attr("href") ?: this.attr("href")) ?: return null
         val rating  = this.selectFirst("span.label-imdb b")?.text()?.trim()
 
         return newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
             this.posterUrl = imgUrl
+            this.posterHeaders = mapOf(
+                "User-Agent" to USER_AGENT,
+                "Referer"    to "$mainUrl/"
+            )
             this.score     = Score.from10(rating)
         }
     }
@@ -164,7 +172,12 @@ class DiziBox : MainAPI() {
         }
 
         val title    = document.selectFirst("div.tv-overview h1 a")?.text()?.trim() ?: return null
-        val poster   = fixUrlNull(document.selectFirst("div.tv-overview figure img")?.attr("src"))
+        val posterEl = document.selectFirst("div.tv-overview figure img")
+        val rawPoster = posterEl?.attr("data-src")?.takeIf { it.isNotBlank() }
+            ?: posterEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() }
+            ?: posterEl?.attr("data-original")?.takeIf { it.isNotBlank() }
+            ?: posterEl?.attr("src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
+        val poster   = fixUrlNull(rawPoster)
         val plot     = document.selectFirst("div.tv-story p")?.text()?.trim()
         val year     = document.selectFirst("a[href*='/yil/']")?.text()?.trim()?.toIntOrNull()
         val tags     = document.select("a[href*='/tur/']").map { it.text() }
@@ -228,6 +241,10 @@ class DiziBox : MainAPI() {
 
         return newTvSeriesLoadResponse(title, url, TvType.TvSeries, sortedEpisodes) {
             this.posterUrl = poster
+            this.posterHeaders = mapOf(
+                "User-Agent" to USER_AGENT,
+                "Referer"    to "$mainUrl/"
+            )
             this.plot      = plot
             this.year      = year
             this.tags      = tags
@@ -316,10 +333,17 @@ class DiziBox : MainAPI() {
             }
 
             iframeUrl.contains("/player/king/king.php") || iframeUrl.contains("php?v=") -> {
-                val playerUrl = iframeUrl.replace("php?v=", "php?wmode=opaque&v=")
+                val playerUrl = if (iframeUrl.contains("king.php")) iframeUrl else iframeUrl.replace("php?v=", "php?wmode=opaque&v=")
                 val playerDoc = app.get(
                     playerUrl,
                     referer     = sourceUrl,
+                    headers     = mapOf(
+                        "User-Agent"     to USER_AGENT,
+                        "Referer"        to sourceUrl,
+                        "Sec-Fetch-Dest" to "iframe",
+                        "Sec-Fetch-Mode" to "navigate",
+                        "Sec-Fetch-Site" to "same-origin"
+                    ),
                     cookies     = baseCookies,
                     interceptor = interceptor
                 ).document
@@ -345,6 +369,12 @@ class DiziBox : MainAPI() {
                     val m3u8Data = app.get(
                         sheila,
                         referer     = finalEmbed,
+                        headers     = mapOf(
+                            "User-Agent"     to USER_AGENT,
+                            "Referer"        to finalEmbed,
+                            "Sec-Fetch-Dest" to "empty",
+                            "Sec-Fetch-Mode" to "cors"
+                        ),
                         interceptor = interceptor
                     ).text
                     val m3u8Url = m3u8Data.lineSequence().firstOrNull { it.trim().startsWith("http") }?.trim()

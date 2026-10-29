@@ -1,4 +1,4 @@
-version = 1027
+version = 1028
 cloudstream {
     authors     = listOf("Wiojelt", "keyiflerolsun")
     language    = "tr"

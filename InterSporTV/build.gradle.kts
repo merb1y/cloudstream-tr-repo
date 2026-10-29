@@ -1,4 +1,4 @@
-version = 1001
+version = 1002
 cloudstream {
     authors     = listOf("merby")
     language    = "tr"
