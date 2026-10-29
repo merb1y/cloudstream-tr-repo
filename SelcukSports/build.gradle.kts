@@ -1,8 +1,8 @@
-version = 1
+version = 2
 cloudstream {
     authors     = listOf("merby")
     language    = "tr"
-    description = "SelçukSports - Canlı beIN Sports 1-5, S Sport, Tivibu, Smart Spor ve Kesintisiz Maç Yayınları"
+    description = "SelÃ§ukSports - CanlÄ± beIN Sports 1-5, S Sport, Tivibu, Smart Spor ve Kesintisiz MaÃ§ YayÄ±nlarÄ±"
     status      = 1
     tvTypes     = listOf("Live")
     iconUrl     = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports1.png"

@@ -12,28 +12,40 @@ class SporTV : MainAPI() {
     override val hasDownloadSupport = false
     override val supportedTypes = setOf(TvType.Live)
 
-    data class AlternativeLink(val name: String, val url: String, val referer: String = "")
+    private val ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+
+    data class AlternativeLink(val name: String, val url: String, val referer: String = "", val origin: String = "")
     data class ChannelItem(
         val name: String,
         val url: String,
         val poster: String,
         val category: String,
         val referer: String = "",
+        val origin: String = "",
+        val beyazSlug: String? = null,
+        val atomId: String? = null,
+        val interSlug: String? = null,
         val alternatives: List<AlternativeLink> = emptyList()
     )
 
     private val sportsChannels = listOf(
-        // 1. BEIN SPORTS & CANLI MAC KANALLARI
+        // 1. BEIN SPORTS & CANLI MAC KANALLARI (8+ Calisan Sunucu)
         ChannelItem(
             name = "beIN Sports 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports1/playlist.m3u8",
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports1.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-bein-sports-1-hd",
+            atomId = "bein-sports-1",
+            interSlug = "bein-sports-1",
             alternatives = listOf(
-                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebiraz1.m3u8", "https://birazcikspor44.xyz/"),
-                AlternativeLink("Domates TV (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/"),
-                AlternativeLink("ArdaSpor (Hızlı HLS)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/")
+                AlternativeLink("NetSpor / BirazcıkSpor (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebiraz1.m3u8", "https://birazcikspor44.xyz/", "https://birazcikspor44.xyz"),
+                AlternativeLink("MahsunSports Sunucu-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-3 (1080p)", "https://andro.evrenesoglu215.click/checklist/androstreamlivebs1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("Domates TV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
             )
         ),
         ChannelItem(
@@ -42,9 +54,15 @@ class SporTV : MainAPI() {
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports2.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-bein-sports-2-hd",
+            atomId = "bein-sports-2",
+            interSlug = "bein-sports-2",
             alternatives = listOf(
-                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs2.m3u8", "https://birazcikspor44.xyz/"),
-                AlternativeLink("Domates TV / ArdaSpor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs2.m3u8", "https://patronskor.cfd/")
+                AlternativeLink("NetSpor / MahsunSports-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-3 (1080p)", "https://andro.evrenesoglu215.click/checklist/androstreamlivebs2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("Domates TV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs2.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
             )
         ),
         ChannelItem(
@@ -53,9 +71,14 @@ class SporTV : MainAPI() {
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports3.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-bein-sports-3-fhd",
+            atomId = "bein-sports-3",
+            interSlug = "bein-sports-3",
             alternatives = listOf(
-                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs3.m3u8", "https://birazcikspor44.xyz/"),
-                AlternativeLink("Domates TV / ArdaSpor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs3.m3u8", "https://patronskor.cfd/")
+                AlternativeLink("NetSpor / MahsunSports-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs3.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs3.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("Domates TV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs3.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
             )
         ),
         ChannelItem(
@@ -64,9 +87,14 @@ class SporTV : MainAPI() {
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports4.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-bein-sports-4",
+            atomId = "bein-sports-4",
+            interSlug = "bein-sports-4",
             alternatives = listOf(
-                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs4.m3u8", "https://birazcikspor44.xyz/"),
-                AlternativeLink("Domates TV / ArdaSpor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs4.m3u8", "https://patronskor.cfd/")
+                AlternativeLink("NetSpor / MahsunSports-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs4.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs4.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("Domates TV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs4.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
             )
         ),
         ChannelItem(
@@ -75,8 +103,38 @@ class SporTV : MainAPI() {
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports5.png",
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "beinsports-5",
+            interSlug = "bein-sports-5",
             alternatives = listOf(
-                AlternativeLink("Biraz Sports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs5.m3u8", "https://birazcikspor44.xyz/")
+                AlternativeLink("NetSpor / MahsunSports-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs5.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs5.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
+        ),
+        ChannelItem(
+            name = "beIN Sports Max 1 HD",
+            url = "https://andro.evrenesoglu219.click/checklist/androstreamlivebsm1.m3u8",
+            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports1.png",
+            category = "beIN Sports (Canlı Maç)",
+            referer = "https://mahsunsports55.xyz/",
+            origin = "https://mahsunsports55.xyz",
+            beyazSlug = "tr-bein-sports-max-1-hd",
+            interSlug = "bein-sports-max-1",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebsm1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
+        ),
+        ChannelItem(
+            name = "beIN Sports Max 2 HD",
+            url = "https://andro.evrenesoglu219.click/checklist/androstreamlivebsm2.m3u8",
+            poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports2.png",
+            category = "beIN Sports (Canlı Maç)",
+            referer = "https://mahsunsports55.xyz/",
+            origin = "https://mahsunsports55.xyz",
+            beyazSlug = "tr-bein-sports-max-2-fhd",
+            interSlug = "bein-sports-max-2",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebsm2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
             )
         ),
 
@@ -86,35 +144,66 @@ class SporTV : MainAPI() {
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport/playlist.m3u8",
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/ssport.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/"
+            referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-s-sport",
+            atomId = "s-sport",
+            interSlug = "s-sport",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivess1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
         ),
         ChannelItem(
             name = "S Sport 2 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport2/playlist.m3u8",
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/ssport2.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/"
+            referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-s-sport-2-hd",
+            atomId = "s-sport-2",
+            interSlug = "s-sport-2",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivess2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
         ),
         ChannelItem(
             name = "Tivibu Spor 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktivibuspor/playlist.m3u8",
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/tivibuspor.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/"
+            referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-tivibu-spor-1-sd",
+            interSlug = "tivibu-spor-1",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivets1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
         ),
         ChannelItem(
             name = "Smart Spor 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuksmartspor/playlist.m3u8",
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/smartspor.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/"
+            referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-smart-sport-hd-2",
+            interSlug = "spor-smart",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivesm1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
         ),
         ChannelItem(
             name = "Tabii Spor 1 HD",
             url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktabiispor/playlist.m3u8",
             poster = "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/tabiispor.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/"
+            referer = "https://www.selcuksportshd1846.xyz/",
+            origin = "https://www.selcuksportshd1846.xyz",
+            beyazSlug = "tr-tabii-spor-fhd",
+            alternatives = listOf(
+                AlternativeLink("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivetb1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
+            )
         ),
 
         // 3. ULUSAL VE ACIK SPOR KANALLARI
@@ -182,7 +271,7 @@ class SporTV : MainAPI() {
         val ch = sportsChannels.find { it.url == url } ?: sportsChannels.first()
         return newLiveStreamLoadResponse(ch.name, ch.url, url) {
             this.posterUrl = ch.poster
-            this.plot = "${ch.name} - 7/24 Kesintisiz Canlı Maç & Spor Yayını"
+            this.plot = "${ch.name} - 8 Ayrı Çalışan Sunuculu Canlı Maç & Spor Yayını"
         }
     }
 
@@ -195,25 +284,121 @@ class SporTV : MainAPI() {
         val ch = sportsChannels.find { it.url == data }
         val title = ch?.name ?: "SporTV"
 
-        // 1. Ana Link
+        // 1. Ana Link (SelçukSports HD)
         callback.invoke(
             newExtractorLink(
                 source = name,
-                name = "$title (Ana Sunucu)",
+                name = "$title - SelçukSports (1080p)",
                 url = data,
                 type = ExtractorLinkType.M3U8
             ) {
                 if (!ch?.referer.isNullOrBlank()) {
-                    this.headers = mapOf(
-                        "Referer" to ch!!.referer,
-                        "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                    )
+                    this.referer = ch!!.referer
+                    this.headers = buildMap {
+                        put("Referer", ch.referer)
+                        put("User-Agent", ua)
+                        if (ch.origin.isNotBlank()) put("Origin", ch.origin)
+                    }
                 }
                 this.quality = Qualities.P1080.value
             }
         )
 
-        // 2. Yedek Alternatif Linkler
+        // 2. BeyazElma Edge-1 & Edge-2 Dinamik Sunucuları
+        if (ch?.beyazSlug != null) {
+            runCatching {
+                val json = app.get(
+                    "https://embed.beyazelma78.com/api/play/${ch.beyazSlug}",
+                    headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to "https://beyazelma78.com/",
+                        "Origin"     to "https://beyazelma78.com"
+                    )
+                ).text
+                val primary = Regex(""""primary"\s*:\s*"([^"]+)"""").find(json)?.groupValues?.get(1)
+                val fallbacks = Regex(""""fallbacks"\s*:\s*\[(.*?)\]""").find(json)?.groupValues?.get(1)
+                    ?.let { Regex(""""(https?://[^"]+)"""").findAll(it).map { m -> m.groupValues[1] }.toList() }
+                    ?: emptyList()
+
+                if (!primary.isNullOrBlank()) {
+                    callback.invoke(
+                        newExtractorLink(name, "$title - BeyazElma Edge-1 (1080p)", primary, ExtractorLinkType.M3U8) {
+                            this.referer = "https://beyazelma78.com/"
+                            this.headers = mapOf(
+                                "User-Agent" to ua,
+                                "Referer"    to "https://beyazelma78.com/",
+                                "Origin"     to "https://beyazelma78.com"
+                            )
+                            this.quality = Qualities.P1080.value
+                        }
+                    )
+                }
+                fallbacks.forEachIndexed { idx, fb ->
+                    callback.invoke(
+                        newExtractorLink(name, "$title - BeyazElma Edge-${idx + 2} (1080p)", fb, ExtractorLinkType.M3U8) {
+                            this.referer = "https://beyazelma78.com/"
+                            this.headers = mapOf(
+                                "User-Agent" to ua,
+                                "Referer"    to "https://beyazelma78.com/",
+                                "Origin"     to "https://beyazelma78.com"
+                            )
+                            this.quality = Qualities.P1080.value
+                        }
+                    )
+                }
+            }
+        }
+
+        // 3. İnterSporTV Cloudflare CDN Sunucusu
+        if (ch?.interSlug != null) {
+            callback.invoke(
+                newExtractorLink(
+                    name,
+                    "$title - İnterSporTV (Cloudflare CDN)",
+                    "https://pix.ruhhi.workers.dev/${ch.interSlug}.m3u8",
+                    ExtractorLinkType.M3U8
+                ) {
+                    this.referer = "https://intersportv1.live/"
+                    this.headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to "https://intersportv1.live/",
+                        "Origin"     to "https://intersportv1.live"
+                    )
+                    this.quality = Qualities.P1080.value
+                }
+            )
+        }
+
+        // 4. AtomSpor / TeleTV Dinamik Sunucusu
+        if (ch?.atomId != null) {
+            runCatching {
+                val resp = app.get(
+                    "https://teletv15.top/load/yayinlink.php?id=${ch.atomId}",
+                    headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to "https://atomsportv519.top/",
+                        "Origin"     to "https://atomsportv519.top"
+                    )
+                ).text
+                val stream = Regex(""""deismackanal"\s*:\s*"([^"]+\.m3u8[^"]*)"""").find(resp)?.groupValues?.get(1)
+                    ?.replace("\\/", "/")
+                if (!stream.isNullOrBlank()) {
+                    callback.invoke(
+                        newExtractorLink(name, "$title - AtomSpor / TeleTV (1080p)", stream, ExtractorLinkType.M3U8) {
+                            this.referer = "https://atomsportv519.top/"
+                            this.headers = mapOf(
+                                "User-Agent" to ua,
+                                "Referer"    to "https://atomsportv519.top/",
+                                "Origin"     to "https://atomsportv519.top"
+                            )
+                            this.quality = Qualities.P1080.value
+                        }
+                    )
+                }
+            }
+        }
+
+        // 5. Yedek Alternatif Sunucular (NetSpor, MahsunSports 1-3, DomatesTV)
         ch?.alternatives?.forEach { alt ->
             callback.invoke(
                 newExtractorLink(
@@ -223,10 +408,12 @@ class SporTV : MainAPI() {
                     type = ExtractorLinkType.M3U8
                 ) {
                     if (alt.referer.isNotBlank()) {
-                        this.headers = mapOf(
-                            "Referer" to alt.referer,
-                            "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                        )
+                        this.referer = alt.referer
+                        this.headers = buildMap {
+                            put("Referer", alt.referer)
+                            put("User-Agent", ua)
+                            if (alt.origin.isNotBlank()) put("Origin", alt.origin)
+                        }
                     }
                     this.quality = Qualities.P1080.value
                 }

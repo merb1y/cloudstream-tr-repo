@@ -6,6 +6,7 @@ import com.lagradost.cloudstream3.MainPageRequest;
 import com.lagradost.cloudstream3.SearchResponse;
 import com.lagradost.cloudstream3.utils.ExtractorLink;
 import com.lagradost.cloudstream4.desktop.plugins.DexConverter;
+import com.lagradost.cloudstream4.desktop.plugins.ExtensionClassLoader;
 
 import java.io.File;
 import java.io.InputStream;
@@ -61,7 +62,7 @@ public class ApiProbe {
         System.out.println("PROBE " + cs3.getName());
         File jar = DexConverter.INSTANCE.cs3ToJar(cs3);
 
-        try (URLClassLoader cl = new URLClassLoader(new URL[]{jar.toURI().toURL()}, ApiProbe.class.getClassLoader())) {
+        try (URLClassLoader cl = new ExtensionClassLoader(jar, ApiProbe.class.getClassLoader())) {
             List<MainAPI> onceki = new ArrayList<>(APIHolder.INSTANCE.getAllProviders());
             Object api = null;
             Class<?> apiClass = null;
@@ -227,7 +228,7 @@ public class ApiProbe {
                         }
                         if (!links.isEmpty()) break;
                     }
-                } else if (akisUrl == null || !akisUrl.startsWith("http")) {
+                } else {
                     try {
                         loadLinks(api, apiClass, c[1], subs, links);
                     } catch (Exception e) {
@@ -248,7 +249,7 @@ public class ApiProbe {
                 }
 
                 int ogeOk = 0;
-                if (live) {
+                if (live && links.isEmpty()) {
                     String hedef = akisUrl != null ? akisUrl : c[1];
                     String v = httpCheck(hedef, null);
                     System.out.println("  canliHTTP " + v + "  <= " + hedef);
