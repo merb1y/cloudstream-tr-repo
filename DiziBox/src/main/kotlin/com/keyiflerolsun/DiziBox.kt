@@ -243,15 +243,13 @@ class DiziBox : MainAPI() {
         ).document
 
         val iframeUrl = document.selectFirst("div#video-area iframe")?.attr("src")
-            ?: return false
-
-        processIframe(iframeUrl, data, data, subtitleCallback, callback)
 
         val altOptions = document.select("div.video-toolbar option[value]")
             .mapNotNull { fixUrlNull(it.attr("value")) }
             .filter { it != data }
-            .take(2)
+            .take(3)
 
+        // Alternatif oynatıcıları (VidMoly vb.) önce tara ki doğrudan çalışan 1080p yayın ilk sırada açılsın
         altOptions.amap { altUrl ->
             try {
                 val sourceDoc = app.get(
@@ -266,6 +264,10 @@ class DiziBox : MainAPI() {
                     processIframe(srcIframe, altUrl, data, subtitleCallback, callback)
                 }
             } catch (_: Throwable) {}
+        }
+
+        if (iframeUrl != null) {
+            processIframe(iframeUrl, data, data, subtitleCallback, callback)
         }
 
         return true
@@ -383,7 +385,7 @@ class DiziBox : MainAPI() {
                 callback.invoke(
                     newExtractorLink(
                         source = name,
-                        name = "VidMoly",
+                        name = "VidMoly (1080p Full HD)",
                         url = m3u8Match,
                         type = ExtractorLinkType.M3U8
                     ) {

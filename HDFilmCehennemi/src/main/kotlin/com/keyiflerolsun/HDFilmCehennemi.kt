@@ -149,14 +149,17 @@ class HDFilmCehennemi : MainAPI() {
     override suspend fun load(url: String): LoadResponse? {
         val document = app.get(url, interceptor = interceptor).document
 
-        val title       = document.selectFirst("h1.section-title")?.text()?.substringBefore(" izle") ?: return null
+        val title       = (document.selectFirst("h1.section-title, h1.title, h1.entry-title, h1")?.text()
+            ?: document.title()).substringBefore(" izle").substringBefore(" - ").trim()
+        if (title.isBlank()) return null
         val poster      = fixUrlNull(document.select("aside.post-info-poster img.lazyload").lastOrNull()?.attr("data-src"))
         val tags        = document.select("div.post-info-genres a").map { it.text() }
         val year        = document.selectFirst("div.post-info-year-country a")?.text()?.trim()?.toIntOrNull()
         val tvType      = if (document.select("div.seasons").isEmpty()) TvType.Movie else TvType.TvSeries
         val description = document.selectFirst("article.post-info-content > p")?.text()?.trim()
-        val actors      = document.select("div.post-info-cast a").map {
-            Actor(it.selectFirst("strong")!!.text(), it.select("img").attr("data-src"))
+        val actors      = document.select("div.post-info-cast a").mapNotNull {
+            val actorName = it.selectFirst("strong")?.text()?.trim() ?: it.text().trim()
+            if (actorName.isBlank()) null else Actor(actorName, it.select("img").attr("data-src"))
         }
 
         val recommendations = document.select("div.section-slider-container div.slider-slide").mapNotNull {

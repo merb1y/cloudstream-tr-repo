@@ -31,8 +31,9 @@ class SporTV : MainAPI() {
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             alternatives = listOf(
-                AlternativeLink("Biraz Sports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebiraz1.m3u8", "https://birazcikspor44.xyz/"),
-                AlternativeLink("Canlı TV Türk (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/")
+                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebiraz1.m3u8", "https://birazcikspor44.xyz/"),
+                AlternativeLink("Domates TV (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/"),
+                AlternativeLink("ArdaSpor (Hızlı HLS)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/")
             )
         ),
         ChannelItem(
@@ -42,7 +43,8 @@ class SporTV : MainAPI() {
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             alternatives = listOf(
-                AlternativeLink("Biraz Sports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs2.m3u8", "https://birazcikspor44.xyz/")
+                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs2.m3u8", "https://birazcikspor44.xyz/"),
+                AlternativeLink("Domates TV / ArdaSpor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs2.m3u8", "https://patronskor.cfd/")
             )
         ),
         ChannelItem(
@@ -52,7 +54,8 @@ class SporTV : MainAPI() {
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             alternatives = listOf(
-                AlternativeLink("Biraz Sports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs3.m3u8", "https://birazcikspor44.xyz/")
+                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs3.m3u8", "https://birazcikspor44.xyz/"),
+                AlternativeLink("Domates TV / ArdaSpor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs3.m3u8", "https://patronskor.cfd/")
             )
         ),
         ChannelItem(
@@ -62,7 +65,8 @@ class SporTV : MainAPI() {
             category = "beIN Sports (Canlı Maç)",
             referer = "https://www.selcuksportshd1846.xyz/",
             alternatives = listOf(
-                AlternativeLink("Biraz Sports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs4.m3u8", "https://birazcikspor44.xyz/")
+                AlternativeLink("NetSpor / MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs4.m3u8", "https://birazcikspor44.xyz/"),
+                AlternativeLink("Domates TV / ArdaSpor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs4.m3u8", "https://patronskor.cfd/")
             )
         ),
         ChannelItem(

@@ -14,22 +14,34 @@ class DiziYou : MainAPI() {
 
     override val mainPage = mainPageOf(
         "${mainUrl}/" to "Popüler Diziler",
-        "${mainUrl}/page/" to "Tüm Diziler"
+        "${mainUrl}/page/1/" to "Tüm Diziler"
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val url = if (page == 1) request.data else "${mainUrl}/page/$page/"
-        val document = app.get(url).document
-        val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a")
-        val list = items.mapNotNull { it.toSearchResult() }.distinctBy { it.url }
-        val hasNext = document.select("a.next, a[href*='/page/${page + 1}/']").isNotEmpty()
-        return newHomePageResponse(request.name, list, hasNext = hasNext)
+        return try {
+            val url = if (page == 1) {
+                request.data
+            } else {
+                "${mainUrl}/page/$page/"
+            }
+            val document = app.get(url).document
+            val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a, ul.alphabetical-category-list li a")
+            val list = items.mapNotNull { it.toSearchResult() }.distinctBy { it.url }
+            val hasNext = document.select("a.next, a[href*='/page/${page + 1}/']").isNotEmpty()
+            newHomePageResponse(request.name, list, hasNext = hasNext)
+        } catch (e: Throwable) {
+            newHomePageResponse(request.name, emptyList(), hasNext = false)
+        }
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val document = app.get("${mainUrl}/?s=${query}").document
-        val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a, div.search-results a")
-        return items.mapNotNull { it.toSearchResult() }.distinctBy { it.url }
+        return try {
+            val document = app.get("${mainUrl}/?s=${query}").document
+            val items = document.select("div#list-series-main a, div.cat-container-main a, div.poster a, div.search-results a, ul.alphabetical-category-list li a")
+            items.mapNotNull { it.toSearchResult() }.distinctBy { it.url }
+        } catch (e: Throwable) {
+            emptyList()
+        }
     }
 
     private fun Element.toSearchResult(): SearchResponse? {
