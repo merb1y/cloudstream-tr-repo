@@ -37,6 +37,10 @@ class DiziBox : MainAPI() {
     private val cloudflareKiller by lazy { CloudflareKiller() }
     private val interceptor      by lazy { CloudflareInterceptor(cloudflareKiller, userAgent) }
 
+    init {
+        MolyStreamProxy.patchDnsForLocalhost()
+    }
+
     class CloudflareInterceptor(
         private val cloudflareKiller: CloudflareKiller,
         private val userAgent: String
@@ -45,8 +49,11 @@ class DiziBox : MainAPI() {
             val request = chain.request().newBuilder()
                 .header("User-Agent", userAgent)
                 .build()
-            val response   = chain.proceed(request)
-            val bodySample = response.peekBody(10 * 1024).string()
+            val response = chain.proceed(request)
+            if (response.code !in listOf(403, 503, 429) && response.header("cf-mitigated") == null) {
+                return response
+            }
+            val bodySample = runCatching { response.peekBody(4096).string() }.getOrDefault("")
             if (
                 bodySample.contains("Güvenlik taramasından geçiriliyorsunuz")
                 || bodySample.contains("cf-browser-verification")
@@ -301,9 +308,11 @@ class DiziBox : MainAPI() {
 
                 val subFrame = subDoc.selectFirst("div#Player iframe")?.attr("src") ?: return
                 if (subFrame.contains("vidmoly") || subFrame.contains("moly")) {
-                    tryExtractDirect(subFrame, "$mainUrl/", callback)
+                    if (tryExtractDirect(subFrame, "$mainUrl/", subtitleCallback, callback)) return
                 }
-                loadExtractor(subFrame, "$mainUrl/", subtitleCallback, callback)
+                if (!subFrame.contains("ok.ru")) {
+                    loadExtractor(subFrame, "$mainUrl/", subtitleCallback, callback)
+                }
             }
 
             iframeUrl.contains("/player/king/king.php") || iframeUrl.contains("php?v=") -> {
@@ -319,49 +328,44 @@ class DiziBox : MainAPI() {
                     ?: return
 
                 if (finalEmbed.contains("dbx.molystream")) {
+                    // Altyazı varsa şifreli sayfadan çıkar
+                    runCatching {
+                        val iDoc      = app.get(finalEmbed, referer = "$mainUrl/", interceptor = interceptor).text
+                        val cryptData = Regex("""CryptoJS\.AES\.decrypt\("(.*?)",""").find(iDoc)?.groupValues?.get(1)
+                        val cryptPass = Regex("""","(.*?)"\);""").find(iDoc)?.groupValues?.get(1)
+                        if (cryptData != null && cryptPass != null) {
+                            val decrypted = CryptoJS.decrypt(cryptPass, cryptData)
+                            Regex(""""file"\s*:\s*"(https?://[^"]+\.(?:vtt|srt)[^"]*)"\s*,\s*"label"\s*:\s*"([^"]+)"""").findAll(decrypted).forEach { m ->
+                                subtitleCallback.invoke(newSubtitleFile(m.groupValues[2], m.groupValues[1]))
+                            }
+                        }
+                    }
+
                     val sheila   = finalEmbed.replace("/embed/", "/embed/sheila/")
                     val m3u8Data = app.get(
                         sheila,
                         referer     = finalEmbed,
                         interceptor = interceptor
                     ).text
-                    val m3u8Url = m3u8Data.lineSequence().firstOrNull { it.startsWith("http") }
+                    val m3u8Url = m3u8Data.lineSequence().firstOrNull { it.trim().startsWith("http") }?.trim()
                     if (m3u8Url != null) {
+                        val proxiedUrl = MolyStreamProxy.proxyPlaylist(m3u8Url, finalEmbed)
                         callback.invoke(
                             newExtractorLink(
                                 source = name,
-                                name   = name,
-                                url    = m3u8Url,
+                                name   = "King / MolyStream (1080p)",
+                                url    = proxiedUrl,
                                 type   = ExtractorLinkType.M3U8
                             ) {
-                                this.headers = mapOf("Referer" to finalEmbed)
                                 this.quality = Qualities.P1080.value
                             }
                         )
                         return
                     }
-
-                    val iDoc      = app.get(finalEmbed, referer = "$mainUrl/", interceptor = interceptor).text
-                    val cryptData = Regex("""CryptoJS\.AES\.decrypt\("(.*)",""").find(iDoc)?.groupValues?.get(1) ?: return
-                    val cryptPass = Regex("""","(.*)"\);""").find(iDoc)?.groupValues?.get(1) ?: return
-                    val decrypted = CryptoJS.decrypt(cryptPass, cryptData)
-                    val vidUrl    = Regex("""file: '(.*)',""").find(Jsoup.parse(decrypted).html())?.groupValues?.get(1) ?: return
-
-                    callback.invoke(
-                        newExtractorLink(
-                            source = name,
-                            name   = name,
-                            url    = vidUrl,
-                            type   = ExtractorLinkType.M3U8
-                        ) {
-                            this.headers = mapOf("Referer" to vidUrl)
-                            this.quality = Qualities.P1080.value
-                        }
-                    )
                 } else {
-                    val cleanEmbed = finalEmbed.replace("vidmoly.me", "vidmoly.net")
+                    val cleanEmbed = finalEmbed.replace("vidmoly.me", "vidmoly.biz").replace("vidmoly.to", "vidmoly.biz")
                     if (cleanEmbed.contains("vidmoly") || cleanEmbed.contains("moly")) {
-                        tryExtractDirect(cleanEmbed, sourceUrl, callback)
+                        if (tryExtractDirect(cleanEmbed, sourceUrl, subtitleCallback, callback)) return
                     }
                     loadExtractor(cleanEmbed, sourceUrl, subtitleCallback, callback)
                 }
@@ -376,20 +380,46 @@ class DiziBox : MainAPI() {
     private suspend fun tryExtractDirect(
         embedUrl: String,
         referer: String,
+        subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         try {
-            val resp = app.get(embedUrl, referer = referer, interceptor = interceptor).text
-            val m3u8Match = Regex("""(https?://[^\s'"]+\.m3u8[^\s'"]*)""").find(resp)?.groupValues?.get(1)
+            val fixedUrl = httpsify(embedUrl)
+                .replace("vidmoly.me", "vidmoly.biz")
+                .replace("vidmoly.to", "vidmoly.biz")
+                .let { if (it.contains("/w/")) it.replaceFirst("/w/", "/embed-") + ".html" else it }
+
+            val resp = app.get(
+                fixedUrl,
+                referer = referer,
+                headers = mapOf(
+                    "User-Agent"     to userAgent,
+                    "Sec-Fetch-Dest" to "iframe"
+                )
+            ).text
+
+            val m3u8Match = Regex("""file\s*:\s*['"](https?://[^'"]+\.m3u8[^'"]*)['"]""").find(resp)?.groupValues?.get(1)
+                ?: Regex("""(https?://[^\s'"]+\.m3u8[^\s'"]*)""").find(resp)?.groupValues?.get(1)
+
             if (m3u8Match != null) {
+                val origin = Regex("""^(https?://[^/]+)""").find(fixedUrl)?.groupValues?.get(1) ?: "https://vidmoly.biz"
+                Regex("""file\s*:\s*['"]([^'"]+\.(?:vtt|srt)[^'"]*)['"]\s*,\s*label\s*:\s*['"]([^'"]+)['"]""").findAll(resp).forEach { m ->
+                    val subUrl = if (m.groupValues[1].startsWith("http")) m.groupValues[1] else "$origin${m.groupValues[1]}"
+                    subtitleCallback.invoke(newSubtitleFile(m.groupValues[2], subUrl))
+                }
                 callback.invoke(
                     newExtractorLink(
                         source = name,
-                        name = "VidMoly (1080p Full HD)",
-                        url = m3u8Match,
-                        type = ExtractorLinkType.M3U8
+                        name   = "VidMoly (1080p Full HD)",
+                        url    = m3u8Match,
+                        type   = ExtractorLinkType.M3U8
                     ) {
-                        this.headers = mapOf("Referer" to embedUrl)
+                        this.referer = "$origin/"
+                        this.headers = mapOf(
+                            "User-Agent" to userAgent,
+                            "Referer"    to "$origin/",
+                            "Origin"     to origin
+                        )
                         this.quality = Qualities.P1080.value
                     }
                 )

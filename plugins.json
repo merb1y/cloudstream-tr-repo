@@ -114,10 +114,10 @@
   {
     "internalName": "DiziBox",
     "name": "DiziBox",
-    "version": 1026,
+    "version": 1027,
     "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/DiziBox.cs3",
-    "fileHash": "sha256-098a316061fb409e0d5700d784e768f50750331da3215ff22d42877ad85cbc3f",
-    "fileSize": 31901,
+    "fileHash": "sha256-795cfe57325a9181a0519eb121a2085463ddeb278eccfddb359fef82496978ac",
+    "fileSize": 42510,
     "status": 1,
     "apiVersion": 1,
     "language": "tr",
