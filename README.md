@@ -2,6 +2,20 @@
 
 Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitelere/yayınlara karşı doğrulanmış 35 gerçek eklenti** yer alır (4 Canlı TV, 15+ Dizi, 8+ Film, 4 Anime/Asya, 4 Spor).
 
+## Kurulum
+
+CloudStream → **Ayarlar → Eklentiler → Depo ekle**:
+
+| Yöntem | Değer |
+|---|---|
+| **Kısa kod** | `!merb1y` |
+| Depo adresi | `https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/repo.json` |
+
+> `!merb1y` kısa kodu `py.md/merb1y` üzerinden `repo.json` adresine yönlenir.
+> Başındaki `!` py.md kısa linki anlamına gelir — depo adresi alanına
+> `merb1y` değil, `!merb1y` yazılmalıdır.
+> TV kumandasından yazmak zorsa kısa kodu kullanın.
+
 ## Depodaki eklentiler
 
 ### Canlı TV (4 kaynak)
