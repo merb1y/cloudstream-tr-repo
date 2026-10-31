@@ -1,6 +1,6 @@
 # Merby Türkçe CloudStream Repo
 
-Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitelere/yayınlara karşı doğrulanmış 20 gerçek eklenti** yer alır (4 Canlı TV, 10+ Dizi, 8+ Film, 4 Anime/Asya).
+Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitelere/yayınlara karşı doğrulanmış 35 gerçek eklenti** yer alır (4 Canlı TV, 15+ Dizi, 8+ Film, 4 Anime/Asya, 4 Spor).
 
 ## Depodaki eklentiler
 
@@ -20,6 +20,7 @@ Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitel
 | DiziYou | 1026 | Dizi | Yabancı dizi arşivi (Türkçe dublaj & altyazı) |
 | DiziPod | 1003 | Dizi, Film | Dizi ve film içerikleri |
 | Ddizi | 1024 | Dizi | Yerli diziler ve güncel televizyon bölümleri (ddizi.im) |
+| TurkDizi | 1001 | Dizi | Yerli diziler (Sıfır Bir tüm sezonlar, Çukur, Kurtlar Vadisi, Eşkıya...) + geniş dizi arşivi (dizipal12.com.tr, mntplayer HLS) |
 | DiziBal | 1001 | Dizi, Film, Anime | Yabancı dizi, film ve anime arşivi |
 | DMax | 1002 | Dizi / Belgesel | DMAX Türkiye program ve belgesel bölümleri (dmax.com.tr) |
 | TLCtr | 1019 | Dizi / Program | TLC Türkiye program ve bölümleri (tlctv.com.tr) |

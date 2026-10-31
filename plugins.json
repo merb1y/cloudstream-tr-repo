@@ -496,6 +496,22 @@
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
+    "internalName": "TurkDizi",
+    "name": "TurkDizi",
+    "version": 1001,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/TurkDizi.cs3",
+    "fileHash": "sha256-76e6fd3716da98def0181d7141cf07630c6af2df8461bf14f1ce42ec35ad4f13",
+    "fileSize": 28937,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "Yerli diziler (Sıfır Bir, Çukur, Kurtlar Vadisi, Eşkıya...) ve geniş dizi arşivi - mntplayer HLS oynatıcı",
+    "tvTypes": ["TvSeries"],
+    "iconUrl": "https://www.google.com/s2/favicons?domain=dizipal12.com.tr&sz=128",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
     "internalName": "TurkiyeTV",
     "name": "TurkiyeTV",
     "version": 1001,
