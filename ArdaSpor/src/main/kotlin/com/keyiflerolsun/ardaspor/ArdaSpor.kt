@@ -1,0 +1,322 @@
+package com.keyiflerolsun.ardaspor
+
+import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.utils.*
+
+class ArdaSpor : MainAPI() {
+    override var mainUrl            = "https://ardaspor.com"
+    override var name               = "ArdaSpor"
+    override val hasMainPage        = true
+    override var lang               = "tr"
+    override val hasQuickSearch     = true
+    override val hasDownloadSupport = false
+    override val supportedTypes     = setOf(TvType.Live)
+
+    private val ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+
+    data class StaticServer(val label: String, val url: String, val referer: String, val origin: String)
+
+    data class ChannelDef(
+        val id: String,
+        val title: String,
+        val category: String,
+        val poster: String,
+        val beyazSlug: String? = null,
+        val atomId: String? = null,
+        val interSlug: String? = null,
+        val backups: List<StaticServer> = emptyList()
+    )
+
+    // ArdaSpor / PatronSkor CDN sunucuları
+    private fun arda(stream: String): StaticServer = StaticServer(
+        "ArdaSpor / PatronSkor (1080p)",
+        "https://andro.3749206.xyz/checklist/androstreamlive$stream.m3u8",
+        "https://patronskor.cfd/",
+        "https://patronskor.cfd"
+    )
+
+    private fun mahsun(stream: String): StaticServer = StaticServer(
+        "MahsunSports (1080p)",
+        "https://andro.evrenesoglu219.click/checklist/androstreamlive$stream.m3u8",
+        "https://mahsunsports55.xyz/",
+        "https://mahsunsports55.xyz"
+    )
+
+    private fun selcuk(slug: String): StaticServer = StaticServer(
+        "SelçukSports (1080p)",
+        "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuk$slug/playlist.m3u8",
+        "https://www.selcuksportshd1846.xyz/",
+        "https://www.selcuksportshd1846.xyz"
+    )
+
+    private val channels = listOf(
+        ChannelDef(
+            id = "bein1",
+            title = "beIN Sports 1 FHD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein1.png",
+            beyazSlug = "tr-bein-sports-1-hd",
+            atomId = "bein-sports-1",
+            interSlug = "bein-sports-1",
+            backups = listOf(arda("bs1"), mahsun("bs1"), selcuk("beinsports1"))
+        ),
+        ChannelDef(
+            id = "bein2",
+            title = "beIN Sports 2 FHD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein2.png",
+            beyazSlug = "tr-bein-sports-2-hd",
+            atomId = "bein-sports-2",
+            interSlug = "bein-sports-2",
+            backups = listOf(arda("bs2"), mahsun("bs2"), selcuk("beinsports2"))
+        ),
+        ChannelDef(
+            id = "bein3",
+            title = "beIN Sports 3 FHD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein3.png",
+            beyazSlug = "tr-bein-sports-3-fhd",
+            atomId = "bein-sports-3",
+            interSlug = "bein-sports-3",
+            backups = listOf(arda("bs3"), mahsun("bs3"), selcuk("beinsports3"))
+        ),
+        ChannelDef(
+            id = "bein4",
+            title = "beIN Sports 4 FHD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein4.png",
+            beyazSlug = "tr-bein-sports-4",
+            atomId = "bein-sports-4",
+            interSlug = "bein-sports-4",
+            backups = listOf(arda("bs4"), mahsun("bs4"), selcuk("beinsports4"))
+        ),
+        ChannelDef(
+            id = "bein5",
+            title = "beIN Sports 5 FHD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein5.png",
+            beyazSlug = "beinsports-5",
+            interSlug = "bein-sports-5",
+            backups = listOf(arda("bs5"), mahsun("bs5"), selcuk("beinsports5"))
+        ),
+        ChannelDef(
+            id = "beinmax1",
+            title = "beIN Sports Max 1 HD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein1.png",
+            beyazSlug = "tr-bein-sports-max-1-hd",
+            interSlug = "bein-sports-max-1",
+            backups = listOf(arda("bsm1"), mahsun("bsm1"))
+        ),
+        ChannelDef(
+            id = "beinmax2",
+            title = "beIN Sports Max 2 HD",
+            category = "beIN Sports Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein2.png",
+            beyazSlug = "tr-bein-sports-max-2-fhd",
+            interSlug = "bein-sports-max-2",
+            backups = listOf(arda("bsm2"), mahsun("bsm2"))
+        ),
+        ChannelDef(
+            id = "ssport1",
+            title = "S Sport 1 HD",
+            category = "Özel Spor Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/ssport1.png",
+            beyazSlug = "tr-s-sport",
+            atomId = "s-sport",
+            interSlug = "s-sport",
+            backups = listOf(arda("ss1"), mahsun("ss1"), selcuk("ssport"))
+        ),
+        ChannelDef(
+            id = "ssport2",
+            title = "S Sport 2 HD",
+            category = "Özel Spor Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/ssport2.png",
+            beyazSlug = "tr-s-sport-2-hd",
+            atomId = "s-sport-2",
+            interSlug = "s-sport-2",
+            backups = listOf(arda("ss2"), mahsun("ss2"), selcuk("ssport2"))
+        ),
+        ChannelDef(
+            id = "tivibu1",
+            title = "Tivibu Spor 1 HD",
+            category = "Özel Spor Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tivibu1.png",
+            beyazSlug = "tr-tivibu-spor-1-sd",
+            interSlug = "tivibu-spor-1",
+            backups = listOf(arda("ts1"), mahsun("ts1"), selcuk("tivibuspor"))
+        ),
+        ChannelDef(
+            id = "tivibu2",
+            title = "Tivibu Spor 2 HD",
+            category = "Özel Spor Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tivibu1.png",
+            beyazSlug = "tr-tivibu-spor-2-sd",
+            interSlug = "tivibu-spor-2",
+            backups = listOf(arda("ts2"), mahsun("ts2"))
+        ),
+        ChannelDef(
+            id = "smart1",
+            title = "Smart Spor 1 HD",
+            category = "Özel Spor Kanalları",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/smart1.png",
+            beyazSlug = "tr-smart-sport-hd-2",
+            interSlug = "spor-smart",
+            backups = listOf(arda("sm1"), mahsun("sm1"), selcuk("smartspor"))
+        )
+    )
+
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+        val lists = channels.groupBy { it.category }.map { (cat, list) ->
+            HomePageList(
+                cat,
+                list.map { ch ->
+                    newLiveSearchResponse(ch.title, "$mainUrl/kanal/${ch.id}", TvType.Live) {
+                        this.posterUrl = ch.poster
+                    }
+                },
+                isHorizontalImages = true
+            )
+        }
+        return newHomePageResponse(lists, hasNext = false)
+    }
+
+    override suspend fun search(query: String): List<SearchResponse> =
+        channels.filter { it.title.contains(query, ignoreCase = true) }.map { ch ->
+            newLiveSearchResponse(ch.title, "$mainUrl/kanal/${ch.id}", TvType.Live) {
+                this.posterUrl = ch.poster
+            }
+        }
+
+    override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)
+
+    override suspend fun load(url: String): LoadResponse {
+        val id = url.substringAfterLast('/')
+        val ch = channels.find { it.id == id } ?: channels.first()
+        return newLiveStreamLoadResponse(ch.title, "$mainUrl/kanal/${ch.id}", "$mainUrl/kanal/${ch.id}") {
+            this.posterUrl = ch.poster
+            this.plot = "${ch.title} - ArdaSpor çoklu sunucu altyapılı canlı yayın"
+        }
+    }
+
+    override suspend fun loadLinks(
+        data: String,
+        isCasting: Boolean,
+        subtitleCallback: (SubtitleFile) -> Unit,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        val id = data.substringAfterLast('/')
+        val ch = channels.find { it.id == id } ?: channels.first()
+
+        // 1. BeyazElma Edge-1 & Edge-2 Dinamik Tokenli Sunucular
+        if (ch.beyazSlug != null) {
+            runCatching {
+                val json = app.get(
+                    "https://embed.beyazelma78.com/api/play/${ch.beyazSlug}",
+                    headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to "https://beyazelma78.com/",
+                        "Origin"     to "https://beyazelma78.com"
+                    )
+                ).text
+                val primary = Regex(""""primary"\s*:\s*"([^"]+)"""").find(json)?.groupValues?.get(1)
+                val fallbacks = Regex(""""fallbacks"\s*:\s*\[(.*?)\]"""").find(json)?.groupValues?.get(1)
+                    ?.let { Regex(""""(https?://[^"]+)"""").findAll(it).map { m -> m.groupValues[1] }.toList() }
+                    ?: emptyList()
+
+                if (!primary.isNullOrBlank()) {
+                    callback.invoke(
+                        newExtractorLink(name, "${ch.title} - BeyazElma Edge-1 (1080p)", primary, ExtractorLinkType.M3U8) {
+                            this.referer = "https://beyazelma78.com/"
+                            this.headers = mapOf(
+                                "User-Agent" to ua,
+                                "Referer"    to "https://beyazelma78.com/",
+                                "Origin"     to "https://beyazelma78.com"
+                            )
+                            this.quality = Qualities.P1080.value
+                        }
+                    )
+                }
+                fallbacks.forEachIndexed { idx, fb ->
+                    callback.invoke(
+                        newExtractorLink(name, "${ch.title} - BeyazElma Edge-${idx + 2} (1080p)", fb, ExtractorLinkType.M3U8) {
+                            this.referer = "https://beyazelma78.com/"
+                            this.headers = mapOf(
+                                "User-Agent" to ua,
+                                "Referer"    to "https://beyazelma78.com/",
+                                "Origin"     to "https://beyazelma78.com"
+                            )
+                            this.quality = Qualities.P1080.value
+                        }
+                    )
+                }
+            }
+        }
+
+        // 2. İnterSporTV Cloudflare Worker Sunucusu
+        if (ch.interSlug != null) {
+            callback.invoke(
+                newExtractorLink(
+                    name,
+                    "${ch.title} - İnterSporTV (Cloudflare CDN)",
+                    "https://pix.ruhhi.workers.dev/${ch.interSlug}.m3u8",
+                    ExtractorLinkType.M3U8
+                ) {
+                    this.referer = "https://intersportv1.live/"
+                    this.headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to "https://intersportv1.live/",
+                        "Origin"     to "https://intersportv1.live"
+                    )
+                    this.quality = Qualities.P1080.value
+                }
+            )
+        }
+
+        // 3. AtomSpor / TeleTV Dinamik Sunucusu
+        if (ch.atomId != null) {
+            runCatching {
+                val resp = app.get(
+                    "https://teletv15.top/load/yayinlink.php?id=${ch.atomId}",
+                    headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to "https://atomsportv519.top/",
+                        "Origin"     to "https://atomsportv519.top"
+                    )
+                ).text
+                val stream = Regex(""""deismackanal"\s*:\s*"([^"]+\.m3u8[^"]*)"""").find(resp)?.groupValues?.get(1)
+                    ?.replace("\\/", "/")
+                if (!stream.isNullOrBlank()) {
+                    callback.invoke(
+                        newExtractorLink(name, "${ch.title} - AtomSpor / TeleTV (1080p)", stream, ExtractorLinkType.M3U8) {
+                            this.referer = "https://atomsportv519.top/"
+                            this.headers = mapOf(
+                                "User-Agent" to ua,
+                                "Referer"    to "https://atomsportv519.top/",
+                                "Origin"     to "https://atomsportv519.top"
+                            )
+                            this.quality = Qualities.P1080.value
+                        }
+                    )
+                }
+            }
+        }
+
+        // 4. Statik Yedek Sunucular (ArdaSpor + MahsunSports + SelçukSports)
+        ch.backups.forEach { srv ->
+            callback.invoke(
+                newExtractorLink(name, "${ch.title} - ${srv.label}", srv.url, ExtractorLinkType.M3U8) {
+                    this.referer = srv.referer
+                    this.headers = mapOf(
+                        "User-Agent" to ua,
+                        "Referer"    to srv.referer,
+                        "Origin"     to srv.origin
+                    )
+                    this.quality = Qualities.P1080.value
+                }
+            )
+        }
+
+        return true
+    }
+}

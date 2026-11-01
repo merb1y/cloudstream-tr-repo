@@ -1,6 +1,6 @@
 # Merby Türkçe CloudStream Repo
 
-Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitelere/yayınlara karşı doğrulanmış 35 gerçek eklenti** yer alır (4 Canlı TV, 15+ Dizi, 8+ Film, 4 Anime/Asya, 4 Spor).
+Kendi CloudStream eklenti deponuz (repo). İçinde **derlenmiş ve gerçek sitelere/yayınlara karşı doğrulanmış 38 gerçek eklenti** yer alır (4 Canlı TV, 15+ Dizi, 8+ Film, 4 Anime/Asya, 7 Spor).
 
 ## Kurulum
 
@@ -58,18 +58,33 @@ CloudStream → **Ayarlar → Eklentiler → Depo ekle**:
 Hepsi açık kaynak (GPL-3.0) `feroxx/Kekik-cloudstream` deposundan alınmıştır.
 Lisans ve atıf detayları: [`LICENSE-NOTICE.md`](LICENSE-NOTICE.md)
 
+### Spor (canlı maç)
+| Eklenti | Sürüm | Tür | Ne yapar |
+|---|---|---|---|
+| MahsunSports | 1001 | Canlı Maç | MahsunSports çoklu sunucu (Sunucu-1/2/3) ile beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu Spor, Smart Spor, Tabii Spor |
+| ArdaSpor | 1001 | Canlı Maç | ArdaSpor / PatronSkor sunucuları + MahsunSports & SelçukSports yedekli beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu, Smart |
+| SelcukSporLive | 1001 | Canlı Maç | SelçukSports sunucu öncelikli beIN Sports 1-5, S Sport 1-2, Tivibu Spor 1-3, Smart Spor, Tabii Spor |
+| SporTV | 5 | Canlı Maç | Kesintisiz spor kanalları (beIN Sports 1-5, S Sport 1-2, Tivibu, Smart, Tabii, TRT Spor, A Spor) |
+| SelcukSports | 3 | Canlı Maç | SelçukSports tabanlı beIN Sports 1-5, S Sport, Tivibu, Smart Spor |
+| NetSpor | 3 | Canlı Maç | NetSpor & MahsunSports 1080p beIN Sports 1-5 |
+| InterSporTV | 1002 | Canlı Maç | İnterSporTV Cloudflare CDN destekli beIN Sports 1-5, Max 1-2, S Sport, Tivibu, Smart |
+| AtomSpor | 1002 | Canlı Maç | AtomSpor / TeleTV çoklu sunucu ile beIN Sports 1-5, S Sport 1-2, Tivibu Spor |
+| BeyazElma | 1002 | Canlı Maç | BeyazElma çift Edge sunuculu beIN Sports 1-5, Max, S Sport, Tivibu, Tabii |
+| DomatesTV | 3 | Canlı Maç | Domates TV & ArdaSpor sunuculu beIN Sports ve canlı maç yayınları |
+| Taraftarium24 | 3 | Canlı Maç | Canlı maç ve spor yayınları (beIN Sports, S Sport, Tivibu) |
+
+Hepsi beIN Sports ve diğer spor kanalları için birden çok sunucu denemesi yapar (MahsunSports, SelçukSports, ArdaSpor, DomatesTV, BeyazElma Edge, İnterSporTV CDN, AtomSpor/TeleTV). Bir sunucu düşerse diğerinden oynatırsınız.
+
 > **Not:** MahsunSports / DomatesTV / Taraftarium24 eklentilerinin kaynak kodu kamuya
-> açık değil. Bu üçü için aşağıdaki "Spor içerikleri" bölümüne bakın.
+> açık değil. Bu repo içindeki MahsunSports, ArdaSpor ve SelcukSporLive eklentileri,
+> bu kaynakların halka açık yayın adreslerini (m3u8) toplayan bağımsız eklentilerdir.</｜DSML｜ parameter>
 
-## Spor içerikleri (ayrı depo)
-
-Spor kanalları için ayrı ve aktif bakımlı bir depo kullanmak daha sağlıklı
-(bu eklentiler kapalı kaynak, kendi depomuza kopyalanamaz):
-
-- **TurkSpor** — `https://raw.githubusercontent.com/Wiojelt/TurkSpor/main/repo.json`
-  (MahsunSports, DomatesTV, Taraftarium24, SelcukSports ve ~30 spor kaynağı)
-- **WioSpor** — `https://raw.githubusercontent.com/Wiojelt/WioSpor/main/repo.json`
-  (düzenli canlı TV + spor kanalları)
+>
+> Ek/aktif bakımlı dış spor depoları:
+> - **TurkSpor** — `https://raw.githubusercontent.com/Wiojelt/TurkSpor/main/repo.json`
+>   (MahsunSports, DomatesTV, Taraftarium24, SelcukSports ve ~30 spor kaynağı)
+> - **WioSpor** — `https://raw.githubusercontent.com/Wiojelt/WioSpor/main/repo.json`
+>   (düzenli canlı TV + spor kanalları)
 
 ## Yapı
 

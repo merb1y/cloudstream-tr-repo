@@ -32,6 +32,22 @@
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
+    "internalName": "ArdaSpor",
+    "name": "ArdaSpor",
+    "version": 1001,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/ArdaSpor.cs3",
+    "fileHash": "sha256-1870fbfa9e4f5f8aee3c34d7f507955755c267f13a5a9e2541fb356c0e1c6312",
+    "fileSize": 19656,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "ArdaSpor - ArdaSpor & WioSpor çoklu sunucu altyapısıyla beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu Spor, Smart Spor canlı maç yayınları",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://raw.githubusercontent.com/Wiojelt/TurkSpor/main/assets/providers/ArdaSpor.png",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
     "internalName": "AtomSpor",
     "name": "AtomSpor",
     "version": 1002,
@@ -416,6 +432,22 @@
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
+    "internalName": "MahsunSports",
+    "name": "MahsunSports",
+    "version": 1001,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/MahsunSports.cs3",
+    "fileHash": "sha256-bed13f2ac49bac06b94820b8d7d9b7769d9db59c9948ea2a712a3034ccd36e08",
+    "fileSize": 19897,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "MahsunSports - MahsunSports çoklu sunucu altyapısıyla beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu Spor, Smart Spor canlı maç yayınları",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://mahsunsports55.xyz/favicon.ico",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
     "internalName": "NetSpor",
     "name": "NetSpor",
     "version": 3,
@@ -429,6 +461,22 @@
     "description": "NetSpor & MahsunSports - 1080p beIN Sports 1-5 ve CanlÄ± Spor YayÄ±nlarÄ±",
     "tvTypes": ["Live"],
     "iconUrl": "https://raw.githubusercontent.com/feroxx/test/main/Kanallar/Logolar/beinsports3.png",
+    "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
+  },
+  {
+    "internalName": "SelcukSporLive",
+    "name": "SelcukSporLive",
+    "version": 1001,
+    "url": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/plugins/SelcukSporLive.cs3",
+    "fileHash": "sha256-790dc96353057854a36c4c6bf7e2c5d4c7c9098ee94d1c637fc31af2adfad694",
+    "fileSize": 20562,
+    "status": 1,
+    "apiVersion": 1,
+    "language": "tr",
+    "authors": ["merby"],
+    "description": "SelçukSpor Live - SelçukSports sunucularını önceliklendiren beIN Sports 1-5, S Sport 1-2, Tivibu Spor, Smart Spor, Tabii Spor canlı maç yayınları",
+    "tvTypes": ["Live"],
+    "iconUrl": "https://www.selcuksportshd1846.xyz/favicon.ico",
     "repositoryUrl": "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main"
   },
   {
