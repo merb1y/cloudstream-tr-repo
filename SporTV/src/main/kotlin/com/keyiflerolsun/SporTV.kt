@@ -288,11 +288,11 @@ class SporTV : MainAPI() {
         val ch = sportsChannels.find { it.url == data }
         val title = ch?.name ?: "SporTV"
 
-        // 1. Ana Link (SelçukSports HD)
+        // 1. Ana Link (DomatesTV / PatronSkor HD)
         callback.invoke(
             newExtractorLink(
                 source = name,
-                name = "$title - SelçukSports (1080p)",
+                name = "$title - DomatesTV / PatronSkor (1080p)",
                 url = data,
                 type = ExtractorLinkType.M3U8
             ) {

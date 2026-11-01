@@ -302,7 +302,7 @@ class ArdaSpor : MainAPI() {
             }
         }
 
-        // 4. Statik Yedek Sunucular (ArdaSpor + MahsunSports + SelçukSports)
+        // 4. Statik Yedek Sunucular (ArdaSpor + MahsunSports + Domates/PatronSkor)
         ch.backups.forEach { srv ->
             callback.invoke(
                 newExtractorLink(name, "${ch.title} - ${srv.label}", srv.url, ExtractorLinkType.M3U8) {

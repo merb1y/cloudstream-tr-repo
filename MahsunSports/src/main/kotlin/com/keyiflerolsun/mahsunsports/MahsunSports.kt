@@ -310,7 +310,7 @@ class MahsunSports : MainAPI() {
             }
         }
 
-        // 4. Statik Yedek Sunucular (MahsunSports 1-3 + SelçukSports)
+        // 4. Statik Yedek Sunucular (MahsunSports 1-3 + Domates/PatronSkor)
         ch.backups.forEach { srv ->
             callback.invoke(
                 newExtractorLink(name, "${ch.title} - ${srv.label}", srv.url, ExtractorLinkType.M3U8) {
