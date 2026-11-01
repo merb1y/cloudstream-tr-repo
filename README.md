@@ -61,23 +61,23 @@ Lisans ve atıf detayları: [`LICENSE-NOTICE.md`](LICENSE-NOTICE.md)
 ### Spor (canlı maç)
 | Eklenti | Sürüm | Tür | Ne yapar |
 |---|---|---|---|
-| MahsunSports | 1001 | Canlı Maç | MahsunSports çoklu sunucu (Sunucu-1/2/3) ile beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu Spor, Smart Spor, Tabii Spor |
-| ArdaSpor | 1001 | Canlı Maç | ArdaSpor / PatronSkor sunucuları + MahsunSports & SelçukSports yedekli beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu, Smart |
-| SelcukSporLive | 1001 | Canlı Maç | SelçukSports sunucu öncelikli beIN Sports 1-5, S Sport 1-2, Tivibu Spor 1-3, Smart Spor, Tabii Spor |
-| SporTV | 5 | Canlı Maç | Kesintisiz spor kanalları (beIN Sports 1-5, S Sport 1-2, Tivibu, Smart, Tabii, TRT Spor, A Spor) |
-| SelcukSports | 3 | Canlı Maç | SelçukSports tabanlı beIN Sports 1-5, S Sport, Tivibu, Smart Spor |
-| NetSpor | 3 | Canlı Maç | NetSpor & MahsunSports 1080p beIN Sports 1-5 |
-| InterSporTV | 1002 | Canlı Maç | İnterSporTV Cloudflare CDN destekli beIN Sports 1-5, Max 1-2, S Sport, Tivibu, Smart |
-| AtomSpor | 1002 | Canlı Maç | AtomSpor / TeleTV çoklu sunucu ile beIN Sports 1-5, S Sport 1-2, Tivibu Spor |
-| BeyazElma | 1002 | Canlı Maç | BeyazElma çift Edge sunuculu beIN Sports 1-5, Max, S Sport, Tivibu, Tabii |
-| DomatesTV | 3 | Canlı Maç | Domates TV & ArdaSpor sunuculu beIN Sports ve canlı maç yayınları |
-| Taraftarium24 | 3 | Canlı Maç | Canlı maç ve spor yayınları (beIN Sports, S Sport, Tivibu) |
+| MahsunSports | 1002 | Canlı Maç | MahsunSports çoklu sunucu (Sunucu-1/2/3) + DomatesTV/PatronSkor ile beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu Spor, Smart Spor, Tabii Spor |
+| ArdaSpor | 1002 | Canlı Maç | ArdaSpor / PatronSkor sunucuları + MahsunSports yedekli beIN Sports 1-5, Max 1-2, S Sport 1-2, Tivibu, Smart |
+| SelcukSporLive | 1002 | Canlı Maç | (SporExtra) Domates/PatronSkor + MahsunSports çoklu sunucu ile beIN Sports 1-5, S Sport 1-2, Tivibu Spor 1-3, Smart Spor, Tabii Spor |
+| SporTV | 6 | Canlı Maç | Kesintisiz spor kanalları (beIN Sports 1-5, S Sport 1-2, Tivibu, Smart, Tabii, TRT Spor, A Spor) |
+| SelcukSports | 4 | Canlı Maç | beIN Sports 1-5, S Sport, Tivibu, Smart Spor (Domates/PatronSkor + Mahsun + BeyazElma çoklu sunucu) |
+| NetSpor | 4 | Canlı Maç | NetSpor & MahsunSports & PatronSkor 1080p beIN Sports 1-5 |
+| InterSporTV | 1003 | Canlı Maç | İnterSporTV Cloudflare CDN destekli beIN Sports 1-5, Max 1-2, S Sport, Tivibu, Smart |
+| AtomSpor | 1003 | Canlı Maç | AtomSpor / TeleTV çoklu sunucu ile beIN Sports 1-5, S Sport 1-2, Tivibu Spor |
+| BeyazElma | 1003 | Canlı Maç | BeyazElma çift Edge sunuculu beIN Sports 1-5, Max, S Sport, Tivibu, Tabii |
+| DomatesTV | 4 | Canlı Maç | Domates TV & ArdaSpor sunuculu beIN Sports ve canlı maç yayınları |
+| Taraftarium24 | 4 | Canlı Maç | Canlı maç ve spor yayınları (beIN Sports, S Sport, Tivibu) |
 
-Hepsi beIN Sports ve diğer spor kanalları için birden çok sunucu denemesi yapar (MahsunSports, SelçukSports, ArdaSpor, DomatesTV, BeyazElma Edge, İnterSporTV CDN, AtomSpor/TeleTV). Bir sunucu düşerse diğerinden oynatırsınız.
+Hepsi beIN Sports ve diğer spor kanalları için birden çok sunucu denemesi yapar (MahsunSports, Domates/PatronSkor, BeyazElma Edge, İnterSporTV CDN, AtomSpor/TeleTV). Bir sunucu düşerse diğerinden oynatırsınız.
 
-> **Not:** MahsunSports / DomatesTV / Taraftarium24 eklentilerinin kaynak kodu kamuya
-> açık değil. Bu repo içindeki MahsunSports, ArdaSpor ve SelcukSporLive eklentileri,
-> bu kaynakların halka açık yayın adreslerini (m3u8) toplayan bağımsız eklentilerdir.</｜DSML｜ parameter>
+> **Not:** SelçukSports CDN adresi (`dga1op10s1u3leo...click`) artık bozuk veri döndürdüğü için (TikTok görselleri) eklentilerden kaldırıldı; onun yerine çalışan Domates/PatronSkor sunucuları kullanılıyor. Böylece "siyah ekran" sorunu giderildi.
+>
+> Kanal logoları artık reponun kendi `assets/logos/` klasöründen geliyor (dışarıdaki 404 veren i.ibb.co / feroxx adresleri kaldırıldı).</｜DSML｜ parameter>
 
 >
 > Ek/aktif bakımlı dış spor depoları:

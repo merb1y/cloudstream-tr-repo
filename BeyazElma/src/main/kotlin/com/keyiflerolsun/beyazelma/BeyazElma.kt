@@ -37,7 +37,7 @@ class BeyazElma : MainAPI() {
             atomId = "bein-sports-1",
             interSlug = "bein-sports-1",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports1/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports Sunucu-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
                 StaticServer("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
                 StaticServer("DomatesTV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
@@ -52,7 +52,7 @@ class BeyazElma : MainAPI() {
             atomId = "bein-sports-2",
             interSlug = "bein-sports-2",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports2/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs2.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports Sunucu-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
                 StaticServer("MahsunSports Sunucu-2 (1080p)", "https://andro.evrenesoglu211.click/checklist/androstreamlivebs2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
                 StaticServer("DomatesTV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs2.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
@@ -67,7 +67,7 @@ class BeyazElma : MainAPI() {
             atomId = "bein-sports-3",
             interSlug = "bein-sports-3",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports3/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs3.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports Sunucu-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs3.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
                 StaticServer("DomatesTV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs3.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
             )
@@ -81,7 +81,7 @@ class BeyazElma : MainAPI() {
             atomId = "bein-sports-4",
             interSlug = "bein-sports-4",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports4/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs4.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports Sunucu-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs4.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz"),
                 StaticServer("DomatesTV / PatronSkor (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs4.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd")
             )
@@ -94,7 +94,7 @@ class BeyazElma : MainAPI() {
             beyazSlug = "beinsports-5",
             interSlug = "bein-sports-5",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports5/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivebs5.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports Sunucu-1 (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivebs5.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
             )
         ),
@@ -129,7 +129,7 @@ class BeyazElma : MainAPI() {
             atomId = "s-sport",
             interSlug = "s-sport",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivess1.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivess1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
             )
         ),
@@ -142,7 +142,7 @@ class BeyazElma : MainAPI() {
             atomId = "s-sport-2",
             interSlug = "s-sport-2",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport2/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivess2.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivess2.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
             )
         ),
@@ -154,7 +154,7 @@ class BeyazElma : MainAPI() {
             beyazSlug = "tr-tivibu-spor-1-sd",
             interSlug = "tivibu-spor-1",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktivibuspor/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivets1.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivets1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
             )
         ),
@@ -188,7 +188,7 @@ class BeyazElma : MainAPI() {
             beyazSlug = "tr-smart-sport-hd-2",
             interSlug = "spor-smart",
             backups = listOf(
-                StaticServer("SelçukSports (1080p)", "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuksmartspor/playlist.m3u8", "https://www.selcuksportshd1846.xyz/", "https://www.selcuksportshd1846.xyz"),
+                StaticServer("SelçukSports (1080p)", "https://andro.3749206.xyz/checklist/androstreamlivesm1.m3u8", "https://patronskor.cfd/", "https://patronskor.cfd"),
                 StaticServer("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivesm1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
             )
         )

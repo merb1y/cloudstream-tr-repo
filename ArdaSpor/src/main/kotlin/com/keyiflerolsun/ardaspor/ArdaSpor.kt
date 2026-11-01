@@ -42,11 +42,11 @@ class ArdaSpor : MainAPI() {
         "https://mahsunsports55.xyz"
     )
 
-    private fun selcuk(slug: String): StaticServer = StaticServer(
-        "SelçukSports (1080p)",
-        "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuk$slug/playlist.m3u8",
-        "https://www.selcuksportshd1846.xyz/",
-        "https://www.selcuksportshd1846.xyz"
+    private fun patron(stream: String): StaticServer = StaticServer(
+        "DomatesTV / PatronSkor (1080p)",
+        "https://andro.3749206.xyz/checklist/androstreamlive$stream.m3u8",
+        "https://patronskor.cfd/",
+        "https://patronskor.cfd"
     )
 
     private val channels = listOf(
@@ -58,7 +58,7 @@ class ArdaSpor : MainAPI() {
             beyazSlug = "tr-bein-sports-1-hd",
             atomId = "bein-sports-1",
             interSlug = "bein-sports-1",
-            backups = listOf(arda("bs1"), mahsun("bs1"), selcuk("beinsports1"))
+            backups = listOf(arda("bs1"), mahsun("bs1"), patron("bs1"))
         ),
         ChannelDef(
             id = "bein2",
@@ -68,7 +68,7 @@ class ArdaSpor : MainAPI() {
             beyazSlug = "tr-bein-sports-2-hd",
             atomId = "bein-sports-2",
             interSlug = "bein-sports-2",
-            backups = listOf(arda("bs2"), mahsun("bs2"), selcuk("beinsports2"))
+            backups = listOf(arda("bs2"), mahsun("bs2"), patron("bs2"))
         ),
         ChannelDef(
             id = "bein3",
@@ -78,7 +78,7 @@ class ArdaSpor : MainAPI() {
             beyazSlug = "tr-bein-sports-3-fhd",
             atomId = "bein-sports-3",
             interSlug = "bein-sports-3",
-            backups = listOf(arda("bs3"), mahsun("bs3"), selcuk("beinsports3"))
+            backups = listOf(arda("bs3"), mahsun("bs3"), patron("bs3"))
         ),
         ChannelDef(
             id = "bein4",
@@ -88,7 +88,7 @@ class ArdaSpor : MainAPI() {
             beyazSlug = "tr-bein-sports-4",
             atomId = "bein-sports-4",
             interSlug = "bein-sports-4",
-            backups = listOf(arda("bs4"), mahsun("bs4"), selcuk("beinsports4"))
+            backups = listOf(arda("bs4"), mahsun("bs4"), patron("bs4"))
         ),
         ChannelDef(
             id = "bein5",
@@ -97,7 +97,7 @@ class ArdaSpor : MainAPI() {
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein5.png",
             beyazSlug = "beinsports-5",
             interSlug = "bein-sports-5",
-            backups = listOf(arda("bs5"), mahsun("bs5"), selcuk("beinsports5"))
+            backups = listOf(arda("bs5"), mahsun("bs5"), patron("bs5"))
         ),
         ChannelDef(
             id = "beinmax1",
@@ -125,7 +125,7 @@ class ArdaSpor : MainAPI() {
             beyazSlug = "tr-s-sport",
             atomId = "s-sport",
             interSlug = "s-sport",
-            backups = listOf(arda("ss1"), mahsun("ss1"), selcuk("ssport"))
+            backups = listOf(arda("ss1"), mahsun("ss1"), patron("ss1"))
         ),
         ChannelDef(
             id = "ssport2",
@@ -135,7 +135,7 @@ class ArdaSpor : MainAPI() {
             beyazSlug = "tr-s-sport-2-hd",
             atomId = "s-sport-2",
             interSlug = "s-sport-2",
-            backups = listOf(arda("ss2"), mahsun("ss2"), selcuk("ssport2"))
+            backups = listOf(arda("ss2"), mahsun("ss2"), patron("ss2"))
         ),
         ChannelDef(
             id = "tivibu1",
@@ -144,7 +144,7 @@ class ArdaSpor : MainAPI() {
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tivibu1.png",
             beyazSlug = "tr-tivibu-spor-1-sd",
             interSlug = "tivibu-spor-1",
-            backups = listOf(arda("ts1"), mahsun("ts1"), selcuk("tivibuspor"))
+            backups = listOf(arda("ts1"), mahsun("ts1"), patron("ts1"))
         ),
         ChannelDef(
             id = "tivibu2",
@@ -162,7 +162,7 @@ class ArdaSpor : MainAPI() {
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/smart1.png",
             beyazSlug = "tr-smart-sport-hd-2",
             interSlug = "spor-smart",
-            backups = listOf(arda("sm1"), mahsun("sm1"), selcuk("smartspor"))
+            backups = listOf(arda("sm1"), mahsun("sm1"), patron("sm1"))
         )
     )
 

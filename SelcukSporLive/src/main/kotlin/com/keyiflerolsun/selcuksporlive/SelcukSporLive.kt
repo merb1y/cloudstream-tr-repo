@@ -4,8 +4,8 @@ import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.*
 
 class SelcukSporLive : MainAPI() {
-    override var mainUrl            = "https://www.selcuksportshd1846.xyz"
-    override var name               = "SelçukSpor Live"
+    override var mainUrl            = "https://patronskor.cfd"
+    override var name               = "SporExtra"
     override val hasMainPage        = true
     override var lang               = "tr"
     override val hasQuickSearch     = true
@@ -27,11 +27,11 @@ class SelcukSporLive : MainAPI() {
         val backups: List<StaticServer> = emptyList()
     )
 
-    private fun selcuk(slug: String): StaticServer = StaticServer(
-        "SelçukSports (1080p)",
-        "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuk$slug/playlist.m3u8",
-        "https://www.selcuksportshd1846.xyz/",
-        "https://www.selcuksportshd1846.xyz"
+    private fun patron(stream: String): StaticServer = StaticServer(
+        "DomatesTV / PatronSkor (1080p)",
+        "https://andro.3749206.xyz/checklist/androstreamlive$stream.m3u8",
+        "https://patronskor.cfd/",
+        "https://patronskor.cfd"
     )
 
     private fun mahsun(stream: String): StaticServer = StaticServer(
@@ -50,7 +50,7 @@ class SelcukSporLive : MainAPI() {
             beyazSlug = "tr-bein-sports-1-hd",
             atomId = "bein-sports-1",
             interSlug = "bein-sports-1",
-            backups = listOf(selcuk("beinsports1"), mahsun("bs1"))
+            backups = listOf(patron("bs1"), mahsun("bs1"))
         ),
         ChannelDef(
             id = "bein2",
@@ -60,7 +60,7 @@ class SelcukSporLive : MainAPI() {
             beyazSlug = "tr-bein-sports-2-hd",
             atomId = "bein-sports-2",
             interSlug = "bein-sports-2",
-            backups = listOf(selcuk("beinsports2"), mahsun("bs2"))
+            backups = listOf(patron("bs2"), mahsun("bs2"))
         ),
         ChannelDef(
             id = "bein3",
@@ -70,7 +70,7 @@ class SelcukSporLive : MainAPI() {
             beyazSlug = "tr-bein-sports-3-fhd",
             atomId = "bein-sports-3",
             interSlug = "bein-sports-3",
-            backups = listOf(selcuk("beinsports3"), mahsun("bs3"))
+            backups = listOf(patron("bs3"), mahsun("bs3"))
         ),
         ChannelDef(
             id = "bein4",
@@ -80,7 +80,7 @@ class SelcukSporLive : MainAPI() {
             beyazSlug = "tr-bein-sports-4",
             atomId = "bein-sports-4",
             interSlug = "bein-sports-4",
-            backups = listOf(selcuk("beinsports4"), mahsun("bs4"))
+            backups = listOf(patron("bs4"), mahsun("bs4"))
         ),
         ChannelDef(
             id = "bein5",
@@ -89,7 +89,7 @@ class SelcukSporLive : MainAPI() {
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein5.png",
             beyazSlug = "beinsports-5",
             interSlug = "bein-sports-5",
-            backups = listOf(selcuk("beinsports5"), mahsun("bs5"))
+            backups = listOf(patron("bs5"), mahsun("bs5"))
         ),
         ChannelDef(
             id = "ssport1",
@@ -99,7 +99,7 @@ class SelcukSporLive : MainAPI() {
             beyazSlug = "tr-s-sport",
             atomId = "s-sport",
             interSlug = "s-sport",
-            backups = listOf(selcuk("ssport"), mahsun("ss1"))
+            backups = listOf(patron("ss1"), mahsun("ss1"))
         ),
         ChannelDef(
             id = "ssport2",
@@ -109,7 +109,7 @@ class SelcukSporLive : MainAPI() {
             beyazSlug = "tr-s-sport-2-hd",
             atomId = "s-sport-2",
             interSlug = "s-sport-2",
-            backups = listOf(selcuk("ssport2"), mahsun("ss2"))
+            backups = listOf(patron("ss2"), mahsun("ss2"))
         ),
         ChannelDef(
             id = "tivibu1",
@@ -118,7 +118,7 @@ class SelcukSporLive : MainAPI() {
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tivibu1.png",
             beyazSlug = "tr-tivibu-spor-1-sd",
             interSlug = "tivibu-spor-1",
-            backups = listOf(selcuk("tivibuspor"), mahsun("ts1"))
+            backups = listOf(patron("ts1"), mahsun("ts1"))
         ),
         ChannelDef(
             id = "tivibu2",
@@ -145,7 +145,7 @@ class SelcukSporLive : MainAPI() {
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/smart1.png",
             beyazSlug = "tr-smart-sport-hd-2",
             interSlug = "spor-smart",
-            backups = listOf(selcuk("smartspor"), mahsun("sm1"))
+            backups = listOf(patron("sm1"), mahsun("sm1"))
         ),
         ChannelDef(
             id = "tabii1",
@@ -153,7 +153,7 @@ class SelcukSporLive : MainAPI() {
             category = "Özel Spor Kanalları",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tabii.png",
             beyazSlug = "tr-tabii-spor-fhd",
-            backups = listOf(selcuk("tabiispor"), mahsun("tb1"))
+            backups = listOf(patron("tb1"), mahsun("tb1"))
         )
     )
 
@@ -186,7 +186,7 @@ class SelcukSporLive : MainAPI() {
         val ch = channels.find { it.id == id } ?: channels.first()
         return newLiveStreamLoadResponse(ch.title, "$mainUrl/kanal/${ch.id}", "$mainUrl/kanal/${ch.id}") {
             this.posterUrl = ch.poster
-            this.plot = "${ch.title} - SelçukSports sunucu öncelikli canlı yayın"
+            this.plot = "${ch.title} - Çoklu sunucu (Domates/PatronSkor + MahsunSports) canlı yayın"
         }
     }
 
@@ -199,8 +199,8 @@ class SelcukSporLive : MainAPI() {
         val id = data.substringAfterLast('/')
         val ch = channels.find { it.id == id } ?: channels.first()
 
-        // 1. SelçukSports ana statik sunucu (öncelikli)
-        ch.backups.filter { it.label.contains("Selçuk") }.forEach { srv ->
+        // 1. DomatesTV / PatronSkor ana statik sunucu (öncelikli)
+        ch.backups.filter { it.label.contains("Patron") }.forEach { srv ->
             callback.invoke(
                 newExtractorLink(name, "${ch.title} - ${srv.label}", srv.url, ExtractorLinkType.M3U8) {
                     this.referer = srv.referer
@@ -308,8 +308,8 @@ class SelcukSporLive : MainAPI() {
             }
         }
 
-        // 5. Kalan statik yedek sunucular (MahsunSports)
-        ch.backups.filterNot { it.label.contains("Selçuk") }.forEach { srv ->
+        // 5. Kalan statik yedek sunucular
+        ch.backups.filterNot { it.label.contains("Patron") }.forEach { srv ->
             callback.invoke(
                 newExtractorLink(name, "${ch.title} - ${srv.label}", srv.url, ExtractorLinkType.M3U8) {
                     this.referer = srv.referer

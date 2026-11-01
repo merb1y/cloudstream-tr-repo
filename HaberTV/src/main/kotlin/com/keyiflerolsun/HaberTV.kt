@@ -15,10 +15,10 @@ class HaberTV : MainAPI() {
     data class ChannelItem(val name: String, val url: String, val poster: String, val category: String)
 
     private val newsChannels = listOf(
-        ChannelItem("HaberTürk TV HD", "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv_1080p.m3u8", "https://i.ibb.co/6Pq7p8Q/haberturk.png", "Haber Kanalları"),
-        ChannelItem("Haber Global HD", "https://tv.ensonhaber.com/haberglobal/haberglobal.m3u8", "https://i.ibb.co/3WqQ33N/haberglobal.png", "Haber Kanalları"),
-        ChannelItem("TV 24 HD", "https://turkmedya-live.ercdn.net/tv24/tv24_720p.m3u8", "https://i.ibb.co/hK70Hk8/tv24.png", "Haber Kanalları"),
-        ChannelItem("TRT Haber HD", "https://tv-trthaber.medya.trt.com.tr/master_720.m3u8", "https://i.ibb.co/4T7VjPz/trthaber.png", "Haber Kanalları")
+        ChannelItem("HaberTürk TV HD", "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv_1080p.m3u8", "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/haberturk.png", "Haber Kanalları"),
+        ChannelItem("Haber Global HD", "https://tv.ensonhaber.com/haberglobal/haberglobal.m3u8", "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/haberglobal.png", "Haber Kanalları"),
+        ChannelItem("TV 24 HD", "https://turkmedya-live.ercdn.net/tv24/tv24_720p.m3u8", "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tv24.png", "Haber Kanalları"),
+        ChannelItem("TRT Haber HD", "https://tv-trthaber.medya.trt.com.tr/master_720.m3u8", "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/trthaber.png", "Haber Kanalları")
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {

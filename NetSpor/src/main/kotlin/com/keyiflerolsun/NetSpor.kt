@@ -36,11 +36,11 @@ class NetSpor : MainAPI() {
         // 1. BEIN SPORTS & CANLI MAC KANALLARI (8+ Calisan Sunucu)
         ChannelItem(
             name = "beIN Sports 1 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports1/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivebs1.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein1.png",
             category = "beIN Sports (Canlı Maç)",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-bein-sports-1-hd",
             atomId = "bein-sports-1",
             interSlug = "bein-sports-1",
@@ -54,11 +54,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "beIN Sports 2 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports2/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivebs2.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein2.png",
             category = "beIN Sports (Canlı Maç)",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-bein-sports-2-hd",
             atomId = "bein-sports-2",
             interSlug = "bein-sports-2",
@@ -71,11 +71,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "beIN Sports 3 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports3/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivebs3.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein3.png",
             category = "beIN Sports (Canlı Maç)",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-bein-sports-3-fhd",
             atomId = "bein-sports-3",
             interSlug = "bein-sports-3",
@@ -87,11 +87,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "beIN Sports 4 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports4/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivebs4.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein4.png",
             category = "beIN Sports (Canlı Maç)",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-bein-sports-4",
             atomId = "bein-sports-4",
             interSlug = "bein-sports-4",
@@ -103,11 +103,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "beIN Sports 5 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukbeinsports5/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivebs5.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/bein5.png",
             category = "beIN Sports (Canlı Maç)",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "beinsports-5",
             interSlug = "bein-sports-5",
             alternatives = listOf(
@@ -145,11 +145,11 @@ class NetSpor : MainAPI() {
         // 2. DIGER OZEL SPOR KANALLARI (S Sport, Tivibu, Smart, Tabii)
         ChannelItem(
             name = "S Sport 1 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivess1.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/ssport1.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-s-sport",
             atomId = "s-sport",
             interSlug = "s-sport",
@@ -159,11 +159,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "S Sport 2 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcukssport2/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivess2.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/ssport2.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-s-sport-2-hd",
             atomId = "s-sport-2",
             interSlug = "s-sport-2",
@@ -173,11 +173,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "Tivibu Spor 1 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktivibuspor/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivets1.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tivibu1.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-tivibu-spor-1-sd",
             interSlug = "tivibu-spor-1",
             alternatives = listOf(
@@ -186,11 +186,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "Smart Spor 1 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuksmartspor/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivesm1.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/smart1.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-smart-sport-hd-2",
             interSlug = "spor-smart",
             alternatives = listOf(
@@ -199,11 +199,11 @@ class NetSpor : MainAPI() {
         ),
         ChannelItem(
             name = "Tabii Spor 1 HD",
-            url = "https://dga1op10s1u3leo.33a6243d11525c.click/live/selcuktabiispor/playlist.m3u8",
+            url = "https://andro.3749206.xyz/checklist/androstreamlivetb1.m3u8",
             poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tabii.png",
             category = "Özel Spor Kanalları",
-            referer = "https://www.selcuksportshd1846.xyz/",
-            origin = "https://www.selcuksportshd1846.xyz",
+            referer = "https://patronskor.cfd/",
+            origin = "https://patronskor.cfd",
             beyazSlug = "tr-tabii-spor-fhd",
             alternatives = listOf(
                 AlternativeLink("MahsunSports (1080p)", "https://andro.evrenesoglu219.click/checklist/androstreamlivetb1.m3u8", "https://mahsunsports55.xyz/", "https://mahsunsports55.xyz")
@@ -232,19 +232,19 @@ class NetSpor : MainAPI() {
         ChannelItem(
             name = "TRT Spor Yıldız HD",
             url = "https://trt.daioncdn.net/trtspor-yildiz/master.m3u8?app=web&platform=trtspor",
-            poster = "https://i.ibb.co/Wc63v5c/trtspor-yildiz.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/trtsporyildiz.png",
             category = "Ulusal Spor & Canlı Maç"
         ),
         ChannelItem(
             name = "HT Spor HD",
             url = "https://ciner.daioncdn.net/ht-spor/ht-spor.m3u8?app=web",
-            poster = "https://i.ibb.co/V3Kk7L6/htspor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/htspor.png",
             category = "Ulusal Spor & Canlı Maç"
         ),
         ChannelItem(
             name = "TJK TV HD",
             url = "https://tjktv-live.tjk.org/tjktv.m3u8",
-            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/htspor.png",
+            poster = "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/tjktv.png",
             category = "Ulusal Spor & Canlı Maç"
         )
     )

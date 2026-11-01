@@ -27,7 +27,8 @@ class CanliTV : MainAPI() {
                 val show  = group.value.map { kanal ->
                     val streamurl   = kanal.url.toString()
                     val channelname = kanal.title.toString()
-                    val posterurl   = kanal.attributes["tvg-logo"].toString()
+                    val rawLogo     = kanal.attributes["tvg-logo"]?.takeIf { it.isNotBlank() && it != "null" } ?: GENERIC_LOGO
+                    val posterurl   = rawLogo
                     val chGroup     = kanal.attributes["group-title"].toString()
                     val nation      = kanal.attributes["tvg-country"].toString()
 
@@ -54,7 +55,7 @@ class CanliTV : MainAPI() {
         return kanallar.items.filter { it.title.toString().lowercase().contains(query.lowercase()) }.map { kanal ->
             val streamurl   = kanal.url.toString()
             val channelname = kanal.title.toString()
-            val posterurl   = kanal.attributes["tvg-logo"].toString()
+            val posterurl   = kanal.attributes["tvg-logo"]?.takeIf { it.isNotBlank() && it != "null" } ?: GENERIC_LOGO
             val chGroup     = kanal.attributes["group-title"].toString()
             val nation      = kanal.attributes["tvg-country"].toString()
 
@@ -89,7 +90,7 @@ class CanliTV : MainAPI() {
                 val rcChannelName = kanal.title.toString()
                 if (rcChannelName == loadData.title) continue
 
-                val rcPosterUrl   = kanal.attributes["tvg-logo"].toString()
+                val rcPosterUrl   = kanal.attributes["tvg-logo"]?.takeIf { it.isNotBlank() && it != "null" } ?: GENERIC_LOGO
                 val rcChGroup     = kanal.attributes["group-title"].toString()
                 val rcNation      = kanal.attributes["tvg-country"].toString()
 
@@ -149,12 +150,17 @@ class CanliTV : MainAPI() {
 
             val streamurl   = kanal.url.toString()
             val channelname = kanal.title.toString()
-            val posterurl   = kanal.attributes["tvg-logo"].toString()
+            val posterurl   = kanal.attributes["tvg-logo"]?.takeIf { it.isNotBlank() && it != "null" } ?: GENERIC_LOGO
             val chGroup     = kanal.attributes["group-title"].toString()
             val nation      = kanal.attributes["tvg-country"].toString()
 
             return LoadData(streamurl, channelname, posterurl, chGroup, nation)
         }
+    }
+
+    companion object {
+        private const val GENERIC_LOGO =
+            "https://raw.githubusercontent.com/merb1y/cloudstream-tr-repo/main/assets/logos/atv.png"
     }
 }
 
