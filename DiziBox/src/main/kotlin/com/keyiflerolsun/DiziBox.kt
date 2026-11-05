@@ -73,6 +73,9 @@ class DiziBox : MainAPI() {
         "${mainUrl}/tum-bolumler/page/SAYFA/"                        to "Son Bölümler",
         "${mainUrl}/tum-bolumler/page/SAYFA/?tip=populer"            to "Popüler Diziler",
         "${mainUrl}/dizi-arsivi/page/SAYFA/"                         to "Yeni Eklenenler",
+        "${mainUrl}/tur/dram/page/SAYFA/"                            to "Dram",
+        "${mainUrl}/tur/komedi/page/SAYFA/"                          to "Komedi",
+        "${mainUrl}/tur/korku/page/SAYFA/"                           to "Korku",
         "${mainUrl}/dizi-arsivi/page/SAYFA/?tur[0]=aksiyon&yil&imdb" to "Aksiyon & Macera"
     )
 
@@ -95,7 +98,7 @@ class DiziBox : MainAPI() {
             cacheTime   = 60
         ).document
 
-        val home = document.select("article.detailed-article, article.article-episode-card a.figure-link")
+        val home = document.select("article.detailed-article, article.article-series-poster, article.article-episode-card")
             .mapNotNull { it.toMainPageResult() }
             .distinctBy { it.url }
 
@@ -103,18 +106,59 @@ class DiziBox : MainAPI() {
         return newHomePageResponse(listOf(HomePageList(request.name, home, isHorizontal)), home.isNotEmpty())
     }
 
+    private fun extractImgUrl(root: Element?): String? {
+        if (root == null) return null
+        val candidates = root.select("img.afis, img.main-cover, a.figure-link img, img:not(.language-flag)")
+            .ifEmpty { root.select("img") }
+        for (img in candidates) {
+            if (img.hasClass("language-flag")) continue
+            val src = img.attr("data-src").takeIf { it.isNotBlank() && !it.startsWith("data:") }
+                ?: img.attr("data-lazy-src").takeIf { it.isNotBlank() && !it.startsWith("data:") }
+                ?: img.attr("data-original").takeIf { it.isNotBlank() && !it.startsWith("data:") }
+                ?: img.attr("src").takeIf { it.isNotBlank() && !it.startsWith("data:") }
+                ?: continue
+            val lower = src.lowercase()
+            if (lower.contains("altyazi") || lower.contains("dublaj") || lower.contains("flag")) continue
+            return MolyStreamProxy.proxyImage(fixUrlNull(src))
+        }
+        return null
+    }
+
     private fun Element.toMainPageResult(): SearchResponse? {
-        val titleEl = this.selectFirst("h3 a")
-        val imgEl   = this.selectFirst("img.afis, img.main-cover, figure img, img:not(.language-flag)")
-            ?: this.selectFirst("img")
-        val title   = titleEl?.text() ?: imgEl?.attr("alt") ?: return null
-        val rawSrc  = imgEl?.attr("data-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-            ?: imgEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-            ?: imgEl?.attr("data-original")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-            ?: imgEl?.attr("src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-        val imgUrl  = MolyStreamProxy.proxyImage(fixUrlNull(rawSrc))
-        val href    = fixUrlNull(titleEl?.attr("href") ?: this.attr("href")) ?: return null
-        val rating  = this.selectFirst("span.label-imdb b")?.text()?.trim()
+        val imgUrl = extractImgUrl(this)
+        val (title, href, rating) = when {
+            this.hasClass("article-episode-card") -> {
+                val epAnchor = this.selectFirst("a.episode-card-title")
+                    ?: this.selectFirst("a.figure-link")
+                    ?: return null
+                val series  = this.selectFirst("b.series-name")?.text()?.trim().orEmpty()
+                val season  = this.selectFirst("span.season")?.text()?.trim().orEmpty()
+                val episode = this.selectFirst("b.episode")?.text()?.trim().orEmpty()
+                val builtTitle = listOf(series, "$season $episode".trim())
+                    .filter { it.isNotBlank() }
+                    .joinToString(" - ")
+                    .ifBlank { epAnchor.attr("title").ifBlank { this.selectFirst("img.afis")?.attr("alt").orEmpty() } }
+                if (builtTitle.isBlank()) return null
+                val link = fixUrlNull(epAnchor.attr("href")) ?: return null
+                Triple(builtTitle, link, null)
+            }
+            this.hasClass("article-series-poster") -> {
+                val anchor = this.selectFirst("a.poster-title")
+                    ?: this.selectFirst("a.figure-link")
+                    ?: return null
+                val builtTitle = anchor.text().trim().ifBlank { anchor.attr("title") }.ifBlank { return null }
+                val link = fixUrlNull(anchor.attr("href")) ?: return null
+                val score = this.selectFirst("div.imdb")?.ownText()?.trim()
+                Triple(builtTitle, link, score)
+            }
+            else -> {
+                val titleEl = this.selectFirst("h3 a") ?: return null
+                val builtTitle = titleEl.text().trim().ifBlank { return null }
+                val link = fixUrlNull(titleEl.attr("href")) ?: return null
+                val score = this.selectFirst("span.label-imdb b")?.text()?.trim()
+                Triple(builtTitle, link, score)
+            }
+        }
 
         return newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
             this.posterUrl = imgUrl
@@ -128,8 +172,8 @@ class DiziBox : MainAPI() {
 
     data class SearchApiResponse(@JsonProperty("results") val results: List<SearchResult> = emptyList())
     data class SearchResult(
-        @JsonProperty("post_title")          val postTitle           : String  = "",
-        @JsonProperty("permalink")           val permalink           : String  = "",
+        @JsonProperty("post_title")           val postTitle          : String  = "",
+        @JsonProperty("permalink")            val permalink          : String  = "",
         @JsonProperty("attachment_thumbnail") val attachmentThumbnail: String? = null
     )
 
@@ -178,19 +222,14 @@ class DiziBox : MainAPI() {
             ).document
         }
 
-        val title    = document.selectFirst("div.tv-overview h1 a")?.text()?.trim() ?: return null
-        val posterEl = document.selectFirst("div.tv-overview figure img")
-        val rawPoster = posterEl?.attr("data-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-            ?: posterEl?.attr("data-lazy-src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-            ?: posterEl?.attr("data-original")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-            ?: posterEl?.attr("src")?.takeIf { it.isNotBlank() && !it.startsWith("data:") }
-        val poster   = MolyStreamProxy.proxyImage(fixUrlNull(rawPoster))
-        val plot     = document.selectFirst("div.tv-story p")?.text()?.trim()
-        val year     = document.selectFirst("a[href*='/yil/']")?.text()?.trim()?.toIntOrNull()
-        val tags     = document.select("a[href*='/tur/']").map { it.text() }
-        val actors   = document.select("a[href*='/oyuncu/']").map { Actor(it.text()) }
-        val trailer  = document.selectFirst("div.tv-overview iframe")?.attr("src")
-        val rating   = document.selectFirst("span.label-imdb b")?.text()?.trim()
+        val title  = document.selectFirst("div.tv-overview h1 a")?.text()?.trim() ?: return null
+        val poster = extractImgUrl(document.selectFirst("div.tv-overview figure"))
+        val plot   = document.selectFirst("div.tv-story p")?.text()?.trim()
+        val year   = document.selectFirst("a[href*='/yil/']")?.text()?.trim()?.toIntOrNull()
+        val tags   = document.select("a[href*='/tur/']").map { it.text() }
+        val actors = document.select("a[href*='/oyuncu/']").map { Actor(it.text()) }
+        val trailer = document.selectFirst("div.tv-overview iframe")?.attr("src")
+        val rating  = document.selectFirst("span.label-imdb b")?.text()?.trim()
 
         val seasonLinks = document.select("div#seasons-list a").mapNotNull {
             fixUrlNull(it.attr("href"))
@@ -213,7 +252,7 @@ class DiziBox : MainAPI() {
         allSeasonDocs.forEach { seasonDoc ->
 
             seasonDoc.select("article.grid-box").forEach epLoop@{ epElem ->
-                val epTitleEl = epElem.selectFirst("div.post-title a.season-episode") ?: return@epLoop
+                val epTitleEl  = epElem.selectFirst("div.post-title a.season-episode") ?: return@epLoop
                 val epRawTitle = epTitleEl.text().trim()
                 val epHref     = fixUrlNull(epTitleEl.attr("href")) ?: return@epLoop
 
