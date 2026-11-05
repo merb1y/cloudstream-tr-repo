@@ -1,4 +1,4 @@
-version = 1059
+version = 1060
 cloudstream {
     authors     = listOf("Wiojelt", "hexated")
     language    = "tr"

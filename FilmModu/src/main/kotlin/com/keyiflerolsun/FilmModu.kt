@@ -98,16 +98,16 @@ class FilmModu : MainAPI() {
         Log.d("FLMMD", "data » $data")
         val document = app.get(data).document
 
-        document.select("div.alternates a").forEach {
-            val altLink = fixUrlNull(it.attr("href")) ?: return@forEach
+        document.select("div.alternates a").toList().amap {
+            val altLink = fixUrlNull(it.attr("href")) ?: return@amap
             val altName = it.text()
-            if (altName == "Fragman") return@forEach
+            if (altName == "Fragman") return@amap
 
             val altReq  = app.get(altLink)
-            val vidId   = Regex("""var videoId = '(.*)'""").find(altReq.text)?.groupValues?.get(1) ?: return@forEach
-            val vidType = Regex("""var videoType = '(.*)'""").find(altReq.text)?.groupValues?.get(1) ?: return@forEach
+            val vidId   = Regex("""var videoId = '(.*)'""").find(altReq.text)?.groupValues?.get(1) ?: return@amap
+            val vidType = Regex("""var videoType = '(.*)'""").find(altReq.text)?.groupValues?.get(1) ?: return@amap
 
-            val vidReq = app.get("${mainUrl}/get-source?movie_id=${vidId}&type=${vidType}").parsedSafe<GetSource>() ?: return@forEach
+            val vidReq = app.get("${mainUrl}/get-source?movie_id=${vidId}&type=${vidType}").parsedSafe<GetSource>() ?: return@amap
 
             if (vidReq.subtitle != null) {
                 subtitleCallback.invoke(

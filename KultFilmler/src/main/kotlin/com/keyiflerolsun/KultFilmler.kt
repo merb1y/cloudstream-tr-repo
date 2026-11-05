@@ -24,9 +24,9 @@ class KultFilmler : MainAPI() {
     override val supportedTypes       = setOf(TvType.Movie, TvType.TvSeries)
 	
     // ! CloudFlare bypass
-    override var sequentialMainPage = true
-    override var sequentialMainPageDelay       = 150L
-    override var sequentialMainPageScrollDelay = 150L
+    override var sequentialMainPage = false
+    override var sequentialMainPageDelay       = 0L
+    override var sequentialMainPageScrollDelay = 0L
 
     // ! CloudFlare v2
     private val cloudflareKiller by lazy { CloudflareKiller() }
@@ -36,10 +36,12 @@ class KultFilmler : MainAPI() {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request  = chain.request()
             val response = chain.proceed(request)
-            val doc      = Jsoup.parse(response.peekBody(1024 * 1024).string())
-
-            if (doc.text().contains("Just a moment...")) {
-                return cloudflareKiller.intercept(chain)
+            if (response.code in listOf(403, 503) || response.header("cf-mitigated") != null) {
+                val head = response.peekBody(4096).string()
+                if (head.contains("Just a moment")) {
+                    response.close()
+                    return cloudflareKiller.intercept(chain)
+                }
             }
 
             return response
@@ -228,7 +230,7 @@ class KultFilmler : MainAPI() {
 
         var foundLinks = false
 
-        for (iframe in iframes) {
+        iframes.toList().amap { iframe ->
             Log.d("KLT", "iframe » $iframe")
             if (iframe.contains("vidmoly")) {
                 val headers  = mapOf(
@@ -258,7 +260,7 @@ class KultFilmler : MainAPI() {
                     Log.d("KLT", "VidMoly error: ${e.message}")
                 }
             } else if (iframe.contains("vidpapi.xyz") || iframe.contains("vidpapi.com")) {
-                val videoId = iframe.split("/").lastOrNull() ?: continue
+                val videoId = iframe.split("/").lastOrNull() ?: return@amap
                 try {
                     val iframeResponse = app.get(iframe, headers=mapOf(
                         "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",

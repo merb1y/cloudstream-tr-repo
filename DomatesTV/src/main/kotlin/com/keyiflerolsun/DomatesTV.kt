@@ -308,52 +308,7 @@ class DomatesTV : MainAPI() {
             }
         )
 
-        // 2. BeyazElma Edge-1 & Edge-2 Dinamik Sunucuları
-        if (ch?.beyazSlug != null) {
-            runCatching {
-                val json = app.get(
-                    "https://embed.beyazelma78.com/api/play/${ch.beyazSlug}",
-                    headers = mapOf(
-                        "User-Agent" to ua,
-                        "Referer"    to "https://beyazelma78.com/",
-                        "Origin"     to "https://beyazelma78.com"
-                    )
-                ).text
-                val primary = Regex(""""primary"\s*:\s*"([^"]+)"""").find(json)?.groupValues?.get(1)
-                val fallbacks = Regex(""""fallbacks"\s*:\s*\[(.*?)\]""").find(json)?.groupValues?.get(1)
-                    ?.let { Regex(""""(https?://[^"]+)"""").findAll(it).map { m -> m.groupValues[1] }.toList() }
-                    ?: emptyList()
-
-                if (!primary.isNullOrBlank()) {
-                    callback.invoke(
-                        newExtractorLink(name, "$title - BeyazElma Edge-1 (1080p)", primary, ExtractorLinkType.M3U8) {
-                            this.referer = "https://beyazelma78.com/"
-                            this.headers = mapOf(
-                                "User-Agent" to ua,
-                                "Referer"    to "https://beyazelma78.com/",
-                                "Origin"     to "https://beyazelma78.com"
-                            )
-                            this.quality = Qualities.P1080.value
-                        }
-                    )
-                }
-                fallbacks.forEachIndexed { idx, fb ->
-                    callback.invoke(
-                        newExtractorLink(name, "$title - BeyazElma Edge-${idx + 2} (1080p)", fb, ExtractorLinkType.M3U8) {
-                            this.referer = "https://beyazelma78.com/"
-                            this.headers = mapOf(
-                                "User-Agent" to ua,
-                                "Referer"    to "https://beyazelma78.com/",
-                                "Origin"     to "https://beyazelma78.com"
-                            )
-                            this.quality = Qualities.P1080.value
-                        }
-                    )
-                }
-            }
-        }
-
-        // 3. İnterSporTV Cloudflare CDN Sunucusu
+        // 2. İnterSporTV Cloudflare CDN Sunucusu
         if (ch?.interSlug != null) {
             callback.invoke(
                 newExtractorLink(
@@ -373,36 +328,7 @@ class DomatesTV : MainAPI() {
             )
         }
 
-        // 4. AtomSpor / TeleTV Dinamik Sunucusu
-        if (ch?.atomId != null) {
-            runCatching {
-                val resp = app.get(
-                    "https://teletv15.top/load/yayinlink.php?id=${ch.atomId}",
-                    headers = mapOf(
-                        "User-Agent" to ua,
-                        "Referer"    to "https://atomsportv519.top/",
-                        "Origin"     to "https://atomsportv519.top"
-                    )
-                ).text
-                val stream = Regex(""""deismackanal"\s*:\s*"([^"]+\.m3u8[^"]*)"""").find(resp)?.groupValues?.get(1)
-                    ?.replace("\\/", "/")
-                if (!stream.isNullOrBlank()) {
-                    callback.invoke(
-                        newExtractorLink(name, "$title - AtomSpor / TeleTV (1080p)", stream, ExtractorLinkType.M3U8) {
-                            this.referer = "https://atomsportv519.top/"
-                            this.headers = mapOf(
-                                "User-Agent" to ua,
-                                "Referer"    to "https://atomsportv519.top/",
-                                "Origin"     to "https://atomsportv519.top"
-                            )
-                            this.quality = Qualities.P1080.value
-                        }
-                    )
-                }
-            }
-        }
-
-        // 5. Yedek Alternatif Sunucular (NetSpor, MahsunSports 1-3, DomatesTV)
+        // 3. Yedek Alternatif Sunucular (NetSpor, MahsunSports 1-3, DomatesTV)
         ch?.alternatives?.forEach { alt ->
             callback.invoke(
                 newExtractorLink(
@@ -422,6 +348,81 @@ class DomatesTV : MainAPI() {
                     this.quality = Qualities.P1080.value
                 }
             )
+        }
+
+        // 4. Dinamik Sunucuları (BeyazElma & AtomSpor) paralel ve hızlı timeout ile çöz
+        listOf("beyaz", "atom").amap { src ->
+            if (src == "beyaz" && ch?.beyazSlug != null) {
+                runCatching {
+                    val json = app.get(
+                        "https://embed.beyazelma78.com/api/play/${ch.beyazSlug}",
+                        headers = mapOf(
+                            "User-Agent" to ua,
+                            "Referer"    to "https://beyazelma78.com/",
+                            "Origin"     to "https://beyazelma78.com"
+                        ),
+                        timeout = 4
+                    ).text
+                    val primary = Regex(""""primary"\s*:\s*"([^"]+)"""").find(json)?.groupValues?.get(1)
+                    val fallbacks = Regex(""""fallbacks"\s*:\s*\[(.*?)\]""").find(json)?.groupValues?.get(1)
+                        ?.let { Regex(""""(https?://[^"]+)"""").findAll(it).map { m -> m.groupValues[1] }.toList() }
+                        ?: emptyList()
+
+                    if (!primary.isNullOrBlank()) {
+                        callback.invoke(
+                            newExtractorLink(name, "$title - BeyazElma Edge-1 (1080p)", primary, ExtractorLinkType.M3U8) {
+                                this.referer = "https://beyazelma78.com/"
+                                this.headers = mapOf(
+                                    "User-Agent" to ua,
+                                    "Referer"    to "https://beyazelma78.com/",
+                                    "Origin"     to "https://beyazelma78.com"
+                                )
+                                this.quality = Qualities.P1080.value
+                            }
+                        )
+                    }
+                    fallbacks.forEachIndexed { idx, fb ->
+                        callback.invoke(
+                            newExtractorLink(name, "$title - BeyazElma Edge-${idx + 2} (1080p)", fb, ExtractorLinkType.M3U8) {
+                                this.referer = "https://beyazelma78.com/"
+                                this.headers = mapOf(
+                                    "User-Agent" to ua,
+                                    "Referer"    to "https://beyazelma78.com/",
+                                    "Origin"     to "https://beyazelma78.com"
+                                )
+                                this.quality = Qualities.P1080.value
+                            }
+                        )
+                    }
+                }
+            } else if (src == "atom" && ch?.atomId != null) {
+                runCatching {
+                    val resp = app.get(
+                        "https://teletv15.top/load/yayinlink.php?id=${ch.atomId}",
+                        headers = mapOf(
+                            "User-Agent" to ua,
+                            "Referer"    to "https://atomsportv519.top/",
+                            "Origin"     to "https://atomsportv519.top"
+                        ),
+                        timeout = 4
+                    ).text
+                    val stream = Regex(""""deismackanal"\s*:\s*"([^"]+\.m3u8[^"]*)"""").find(resp)?.groupValues?.get(1)
+                        ?.replace("\\/", "/")
+                    if (!stream.isNullOrBlank()) {
+                        callback.invoke(
+                            newExtractorLink(name, "$title - AtomSpor / TeleTV (1080p)", stream, ExtractorLinkType.M3U8) {
+                                this.referer = "https://atomsportv519.top/"
+                                this.headers = mapOf(
+                                    "User-Agent" to ua,
+                                    "Referer"    to "https://atomsportv519.top/",
+                                    "Origin"     to "https://atomsportv519.top"
+                                )
+                                this.quality = Qualities.P1080.value
+                            }
+                        )
+                    }
+                }
+            }
         }
 
         return true

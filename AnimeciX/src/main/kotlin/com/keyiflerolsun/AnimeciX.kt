@@ -16,9 +16,9 @@ class AnimeciX : MainAPI() {
     override val hasQuickSearch       = false
     override val supportedTypes       = setOf(TvType.Anime)
 
-    override var sequentialMainPage = true        // * https://recloudstream.github.io/dokka/-cloudstream/com.lagradost.cloudstream3/-main-a-p-i/index.html#-2049735995%2FProperties%2F101969414
-    override var sequentialMainPageDelay       = 200L  // ? 0.20 saniye
-    override var sequentialMainPageScrollDelay = 200L  // ? 0.20 saniye
+    override var sequentialMainPage = false
+    override var sequentialMainPageDelay       = 0L
+    override var sequentialMainPageScrollDelay = 0L
 
     override val mainPage = mainPageOf(
         "${mainUrl}/secure/last-episodes"                          to "Son Eklenen Bölümler",
@@ -96,16 +96,17 @@ class AnimeciX : MainAPI() {
         val titleId  = url.substringAfter("?titleId=")
 
         if (response.title.titleType == "anime") {
-            for (sezon in response.title.seasons) {
-                val sezonResponse = app.get("${mainUrl}/secure/related-videos?episode=1&season=${sezon.number}&videoId=0&titleId=${titleId}").parsedSafe<TitleVideos>() ?: return null
-                for (video in sezonResponse.videos) {
-                    episodes.add(newEpisode(video.url) {
+            val seasonEpisodes = response.title.seasons.amap { sezon ->
+                val sezonResponse = app.get("${mainUrl}/secure/related-videos?episode=1&season=${sezon.number}&videoId=0&titleId=${titleId}").parsedSafe<TitleVideos>()
+                sezonResponse?.videos?.map { video ->
+                    newEpisode(video.url) {
                         this.name = "${video.seasonNum}. Sezon ${video.episodeNum}. Bölüm"
                         this.season = video.seasonNum
                         this.episode = video.episodeNum
-                    })
-                }
-            }
+                    }
+                } ?: emptyList()
+            }.flatten().sortedWith(compareBy({ it.season }, { it.episode }))
+            episodes.addAll(seasonEpisodes)
         } else {
             if (response.title.videos.isNotEmpty()) {
                 episodes.add(newEpisode(response.title.videos.first().url) {

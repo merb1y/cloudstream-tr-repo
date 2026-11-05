@@ -22,9 +22,9 @@ class WebdramaTurkey2 : MainAPI() {
         TvType.Others
     )
 
-    override var sequentialMainPage            = true
-    override var sequentialMainPageDelay       = 150L
-    override var sequentialMainPageScrollDelay = 150L
+    override var sequentialMainPage            = false
+    override var sequentialMainPageDelay       = 0L
+    override var sequentialMainPageScrollDelay = 0L
 
     override val mainPage = mainPageOf(
         "${mainUrl}/"                                                    to "Son Bölümler",
@@ -325,14 +325,12 @@ class WebdramaTurkey2 : MainAPI() {
         var foundLinks = false
 
         val buttons = document.select("button[data-embed], a[data-embed]")
-        for (btn in buttons) {
-            val embedId    = btn.attr("data-embed").trim().ifEmpty { continue }
+        buttons.toList().amap { btn ->
+            val embedId    = btn.attr("data-embed").trim().ifEmpty { return@amap }
             val sourceName = btn.selectFirst("span.name")?.text()?.trim()
                 ?: btn.text().trim().ifEmpty { "Alternatif" }
 
             Log.d(TAG, "Embed ID bulundu: $embedId | kaynak: $sourceName")
-
-            kotlinx.coroutines.delay(700)
 
             try {
                 val ajaxResponse = app.post(
@@ -361,13 +359,13 @@ class WebdramaTurkey2 : MainAPI() {
 
                         if (loadExtractor(iframeUrl, mainUrl, subtitleCallback, callback)) {
                             foundLinks = true
-                            continue
+                            return@amap
                         }
 
                         if (iframeUrl.contains("dtpasn.asia") || iframeUrl.contains("dtpasn.com")) {
                             WebDramaTurkeyExtractor().getUrl(iframeUrl, mainUrl, subtitleCallback, callback)
                             foundLinks = true
-                            continue
+                            return@amap
                         }
 
                         if (iframeUrl.contains("bulgu.net/ok/")) {
@@ -394,20 +392,20 @@ class WebdramaTurkey2 : MainAPI() {
                             } catch (e: Exception) {
                                 Log.e(TAG, "bulgu.net hatası: ${e.message}")
                             }
-                            continue
+                            return@amap
                         }
 
                         if (iframeUrl.contains("vkvideo.ru") || iframeUrl.contains("vk.com")) {
                             val extractor = if (iframeUrl.contains("vk.com")) VkCom() else VkExtractor()
                             extractor.getUrl(iframeUrl, mainUrl, subtitleCallback, callback)
                             foundLinks = true
-                            continue
+                            return@amap
                         }
 
                         if (iframeUrl.contains("abstream.to")) {
                             Abstream().getUrl(iframeUrl, mainUrl, subtitleCallback, callback)
                             foundLinks = true
-                            continue
+                            return@amap
                         }
 
                         if (iframeUrl.contains("vidmoly")) {
@@ -415,7 +413,7 @@ class WebdramaTurkey2 : MainAPI() {
                             if (loadExtractor(fixed, mainUrl, subtitleCallback, callback)) {
                                 foundLinks = true
                             }
-                            continue
+                            return@amap
                         }
                     }
                 }
@@ -432,8 +430,8 @@ class WebdramaTurkey2 : MainAPI() {
         }
 
         if (!foundLinks) {
-            document.select("iframe[src]").forEach { iframe ->
-                val iframeSrc = fixUrlNull(iframe.attr("src")) ?: return@forEach
+            document.select("iframe[src]").toList().amap { iframe ->
+                val iframeSrc = fixUrlNull(iframe.attr("src")) ?: return@amap
                 if (loadExtractor(iframeSrc, mainUrl, subtitleCallback, callback)) {
                     foundLinks = true
                 }

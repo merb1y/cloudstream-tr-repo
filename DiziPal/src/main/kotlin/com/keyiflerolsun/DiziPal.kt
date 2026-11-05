@@ -42,9 +42,9 @@ class DiziPal : MainAPI() {
     override val supportedTypes       = setOf(TvType.TvSeries, TvType.Movie)
 
     // ! CloudFlare bypass
-    override var sequentialMainPage            = true
-    override var sequentialMainPageDelay       = 150L
-    override var sequentialMainPageScrollDelay = 150L
+    override var sequentialMainPage            = false
+    override var sequentialMainPageDelay       = 0L
+    override var sequentialMainPageScrollDelay = 0L
 
     // ! CloudFlare v2
     private val cloudflareKiller by lazy { CloudflareKiller() }
@@ -54,10 +54,12 @@ class DiziPal : MainAPI() {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request  = chain.request()
             val response = chain.proceed(request)
-            val doc      = Jsoup.parse(response.peekBody(1024 * 1024).string())
-
-            if (doc.html().contains("Just a moment")) {
-                return cloudflareKiller.intercept(chain)
+            if (response.code in listOf(403, 503) || response.header("cf-mitigated") != null) {
+                val head = response.peekBody(4096).string()
+                if (head.contains("Just a moment") || head.contains("cf-browser-verification")) {
+                    response.close()
+                    return cloudflareKiller.intercept(chain)
+                }
             }
 
             return response

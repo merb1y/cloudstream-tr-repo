@@ -158,10 +158,10 @@ class FilmMakinesi : MainAPI() {
         }
 
         if (videoParts.isNotEmpty()) {
-            videoParts.forEachIndexed { index, part ->
+            videoParts.toList().amap { part ->
                 val embedUrl = part.attr("data-video_url")
                 val label = part.text().trim()
-                Log.d(name, "Part #$index - label: '$label', url: '$embedUrl'")
+                Log.d(name, "Part - label: '$label', url: '$embedUrl'")
                 if (embedUrl.isNotBlank()) {
                     loadExtractor(embedUrl, data, altyaziSarmal, callback)
                 }

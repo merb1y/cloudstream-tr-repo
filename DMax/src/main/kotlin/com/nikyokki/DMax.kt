@@ -81,21 +81,24 @@ class DMax : MainAPI() {
         val description = doc.selectFirst("div.slide-description p")?.text()
         val programId = doc.selectFirst("li.current a")?.attr("data-program-id") ?: ""
         val episodeses = mutableListOf<Episode>()
-        (doc.select("select#video-filter-changer option")).forEach { it ->
+        val seasonResults = doc.select("select#video-filter-changer option").toList().amap { it ->
             val szn = it.attr("value").toIntOrNull()
             val page = app.post("$mainUrl/ajax/more", headers = headers, data =
             mapOf("type" to "episodes", "program_id" to programId.toString(), "page" to "0", "season" to szn.toString())).document
             val hre = page.selectFirst("div.item a")?.attr("href")
             val href = hre?.split("-")
             val epNum = href?.get(href.size-2)?.toIntOrNull() ?: 1
+            val list = mutableListOf<Episode>()
             for (i in epNum downTo 1) {
                 val hree = hre?.replace(epNum.toString(), i.toString())
-                episodeses.add(newEpisode(hree) {
+                list.add(newEpisode(hree) {
                     this.season = szn
                     this.episode = i
                 })
             }
-        }
+            list
+        }.flatten()
+        episodeses.addAll(seasonResults)
         if (episodeses.size == 0) {
             val docu = app.get("$url/kisa-videolar").document
             docu.select("div.items a").forEach { it ->

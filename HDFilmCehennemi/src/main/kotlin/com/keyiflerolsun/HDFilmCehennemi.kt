@@ -19,6 +19,7 @@ import com.lagradost.cloudstream3.MainPageRequest
 import com.lagradost.cloudstream3.SearchResponse
 import com.lagradost.cloudstream3.SubtitleFile
 import com.lagradost.cloudstream3.TvType
+import com.lagradost.cloudstream3.amap
 import com.lagradost.cloudstream3.app
 import com.lagradost.cloudstream3.fixUrl
 import com.lagradost.cloudstream3.fixUrlNull
@@ -53,9 +54,9 @@ class HDFilmCehennemi : MainAPI() {
     override val hasQuickSearch       = true
     override val supportedTypes       = setOf(TvType.Movie, TvType.TvSeries)
 
-    override var sequentialMainPage = true        // * https://recloudstream.github.io/dokka/-cloudstream/com.lagradost.cloudstream3/-main-a-p-i/index.html#-2049735995%2FProperties%2F101969414
-    override var sequentialMainPageDelay       = 150L  // ? 0.15 saniye
-    override var sequentialMainPageScrollDelay = 150L  // ? 0.15 saniye
+    override var sequentialMainPage = false
+    override var sequentialMainPageDelay       = 0L
+    override var sequentialMainPageScrollDelay = 0L
 
     // ! CloudFlare v2
     private val cloudflareKiller by lazy { CloudflareKiller() }
@@ -65,10 +66,12 @@ class HDFilmCehennemi : MainAPI() {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request  = chain.request()
             val response = chain.proceed(request)
-            val doc      = Jsoup.parse(response.peekBody(1024 * 1024).string())
-
-            if (doc.html().contains("Just a moment")) {
-                return cloudflareKiller.intercept(chain)
+            if (response.code in listOf(403, 503) || response.header("cf-mitigated") != null) {
+                val head = response.peekBody(4096).string()
+                if (head.contains("Just a moment") || head.contains("cf-browser-verification")) {
+                    response.close()
+                    return cloudflareKiller.intercept(chain)
+                }
             }
 
             return response
@@ -945,13 +948,17 @@ override suspend fun loadLinks(
     Log.d("HDCH", "data » $data")
     val document = app.get(data, interceptor = interceptor).document
 
-    document.select("div.alternative-links").map { element ->
-        element to element.attr("data-lang").uppercase()
-    }.forEach { (element, langCode) ->
-        element.select("button.alternative-link").map { button ->
-            button.text().replace("(HDrip Xbet)", "").trim() + " $langCode" to button.attr("data-video")
-        }.forEach { (source, videoID) ->
-            if (videoID.isBlank()) return@forEach
+    val tasks = document.select("div.alternative-links").flatMap { element ->
+        val langCode = element.attr("data-lang").uppercase()
+        element.select("button.alternative-link").mapNotNull { button ->
+            val videoID = button.attr("data-video").takeIf { it.isNotBlank() } ?: return@mapNotNull null
+            val source = button.text().replace("(HDrip Xbet)", "").trim() + " $langCode"
+            source to videoID
+        }
+    }
+
+    tasks.amap { (source, videoID) ->
+        runCatching {
             val apiGet = app.get(
                 "${mainUrl}/video/$videoID/", interceptor = interceptor,
                 headers = mapOf(
@@ -966,7 +973,7 @@ override suspend fun loadLinks(
                 ?: iframeDoc.selectFirst("iframe")?.attr("src")?.ifBlank { null }
                 ?: Regex("""data-src=\\"([^"]+)""").find(apiGet)?.groupValues?.get(1)
                 ?: Regex("""src=\\"([^"]+)""").find(apiGet)?.groupValues?.get(1)
-                ?: return@forEach
+                ?: return@runCatching
 
             iframe = iframe.replace("\\/", "/").replace("\\", "").trim().trim('"', '\'')
 

@@ -1,4 +1,4 @@
-version = 1006
+version = 1007
 
 cloudstream {
     authors     = listOf("NeO")

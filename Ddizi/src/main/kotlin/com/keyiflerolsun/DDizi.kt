@@ -36,29 +36,32 @@ class DDizi : MainAPI() {
     
         val home = when (request.name) {
             "Yerli Diziler" -> {
-                val listItems = document.selectFirst("ul.list_")  // Sadece ilkini al
+                val rawItems = document.selectFirst("ul.list_")  // Sadece ilkini al
                     ?.select("li > a")
                     ?.mapNotNull {
                         val title = it.text()?.trim() ?: return@mapNotNull null
                         val rawHref = it.attr("href") ?: return@mapNotNull null
-        
+
                         // İstenmeyen bağlantıları atla
                         if (rawHref.contains("eski.diziler") || rawHref.contains("yabanci-dizi-izle")) {
                             return@mapNotNull null
                         }
-        
+
                         val cleanedHref = fixUrl(rawHref.replace(Regex("-\\d*-?son-bolum-izle/?$"), ""))
-        
-                        val posterDoc = app.get(cleanedHref, headers = getHeaders(mainUrl)).document
-                        val posterUrl = posterDoc.selectFirst("div.afis img, img.afis, img.img-back, img.img-back-cat")
+                        title to cleanedHref
+                    }?.take(20) ?: emptyList()
+
+                rawItems.amap { (title, cleanedHref) ->
+                    val posterUrl = runCatching {
+                        val posterDoc = app.get(cleanedHref, headers = getHeaders(mainUrl), cacheTime = 120).document
+                        posterDoc.selectFirst("div.afis img, img.afis, img.img-back, img.img-back-cat")
                             ?.let { img -> fixUrlNull(img.attr("data-src") ?: img.attr("src")) }
-        
-                        newTvSeriesSearchResponse(title, cleanedHref, TvType.TvSeries) {
-                            this.posterUrl = posterUrl
-                        }
-                    }?.take(36)
-        
-                listItems ?: emptyList()
+                    }.getOrNull()
+
+                    newTvSeriesSearchResponse(title, cleanedHref, TvType.TvSeries) {
+                        this.posterUrl = posterUrl
+                    }
+                }
             }
         
             else -> {
@@ -265,13 +268,9 @@ override suspend fun loadLinks(
             type = if (isHls) ExtractorLinkType.M3U8 else INFER_TYPE
             ) {
             this.quality = getQualityFromName(quality)
-            headers = mapOf("Referer" to "https://twitter.com/")
+            headers = videoHeaders
           }
     )
-
-    if (isHls) {
-        M3u8Helper.generateM3u8(name, fileUrl, "https://twitter.com/", headers = videoHeaders).forEach(callback)
-    }
 
     return true
 }

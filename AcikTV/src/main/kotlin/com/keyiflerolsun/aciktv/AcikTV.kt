@@ -20,9 +20,23 @@ class AcikTV : MainAPI() {
     override val hasDownloadSupport = false
     override val supportedTypes     = setOf(TvType.Live)
 
-    private suspend fun kanallar(): List<PlaylistItem> =
-        IptvPlaylistParser().parseM3U(app.get(mainUrl).text).items
+    @Volatile
+    private var cachedKanallar: List<PlaylistItem>? = null
+    @Volatile
+    private var cacheTimeMs: Long = 0L
+
+    private suspend fun kanallar(): List<PlaylistItem> {
+        val now = System.currentTimeMillis()
+        val current = cachedKanallar
+        if (current != null && now - cacheTimeMs < 15 * 60 * 1000L) {
+            return current
+        }
+        val parsed = IptvPlaylistParser().parseM3U(app.get(mainUrl, cacheTime = 60).text).items
             .filter { !it.url.isNullOrBlank() }
+        cachedKanallar = parsed
+        cacheTimeMs = now
+        return parsed
+    }
 
     /** "General;News" gibi Ingilizce grup adlarini Turkceye cevirir. */
     private fun grupAdi(ham: String?): String {

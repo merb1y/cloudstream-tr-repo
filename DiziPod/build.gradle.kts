@@ -1,4 +1,4 @@
-version = 1003
+version = 1004
 
 cloudstream {
     authors     = listOf("patr0n")

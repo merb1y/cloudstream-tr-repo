@@ -112,7 +112,7 @@ class DiziBal : MainAPI() {
 
         if (url.contains("/series/")) {
             val sezonlar = document.select("a[href*='?sezon=']").mapNotNull { fixUrlNull(it.attr("href"))?.substringBefore("#") }.distinct()
-            val sayfalar = if (sezonlar.isEmpty()) listOf(document) else sezonlar.map { sezonUrl ->
+            val sayfalar = if (sezonlar.isEmpty()) listOf(document) else sezonlar.amap { sezonUrl ->
                 if (sezonUrl.endsWith("sezon=1")) document else app.get(sezonUrl, referer = url).document
             }
 
@@ -159,17 +159,17 @@ class DiziBal : MainAPI() {
             .firstOrNull { it.contains("/assets/js/core.js") || it.contains("/e/c.js") }
             ?.replace(Regex("""/(?:e/c|assets/js/core)\.js.*$"""), "")
 
-        document.select("[data-pv]").forEach { div ->
-            val slug = div.attr("data-pv").ifBlank { return@forEach }
-            val base = oynaticiBase ?: return@forEach
+        document.select("[data-pv]").toList().amap { div ->
+            val slug = div.attr("data-pv").ifBlank { return@amap }
+            val base = oynaticiBase ?: return@amap
             bulundu  = true
             runCatching { Pilavyer().getUrl("$base/assets/js/s.php?s=$slug", "${mainUrl}/", subtitleCallback, callback) }
         }
 
         // ? Diğer gömülü oynatıcılar
-        document.select("div[data-player] iframe[src], iframe[data-src]").forEach { iframe ->
-            val src = fixUrlNull(iframe.attr("src").ifBlank { iframe.attr("data-src") }) ?: return@forEach
-            if (src.contains("youtube")) return@forEach
+        document.select("div[data-player] iframe[src], iframe[data-src]").toList().amap { iframe ->
+            val src = fixUrlNull(iframe.attr("src").ifBlank { iframe.attr("data-src") }) ?: return@amap
+            if (src.contains("youtube")) return@amap
             bulundu = true
             runCatching { loadExtractor(src, "${mainUrl}/", subtitleCallback, callback) }
         }

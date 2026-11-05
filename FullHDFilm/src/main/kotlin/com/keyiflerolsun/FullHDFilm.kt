@@ -169,7 +169,9 @@ class FullHDFilm : MainAPI() {
             "Referer" to mainUrl
         )
 
-        val mainDoc = app.get(data, headers=headers).document
+        val mainResp = app.get(data, headers=headers)
+        val mainDoc = mainResp.document
+        val mainHtml = mainResp.text
         
         // Dublaj/Altyazı alternatiflerini bul
         val pageLinks = mutableListOf<Pair<String, String>>()
@@ -194,12 +196,11 @@ class FullHDFilm : MainAPI() {
         Log.d("FHDF", "Pages to process: ${pageLinks.map { it.second }}")
         var foundLinks = false
 
-        for ((name, pageUrl) in pageLinks) {
+        pageLinks.amap { (name, pageUrl) ->
             val sourceName = if (name.isBlank() || name == "Ana Sunucu") "Vidpapi" else "Vidpapi - $name"
             
             try {
-                val response = app.get(pageUrl, headers=headers)
-                val sourceCode = response.text
+                val sourceCode = if (pageUrl == data) mainHtml else app.get(pageUrl, headers=headers).text
 
                 // Ana sayfadan altyazı URL’sini çek
                 var subtitleUrl = extractSubtitleUrl(sourceCode)
@@ -214,20 +215,13 @@ class FullHDFilm : MainAPI() {
 
                 // Altyazı bulunduysa ekle
                 if (subtitleUrl != null) {
-                    try {
-                        val subtitleResponse = app.get(subtitleUrl, headers=headers, allowRedirects=true)
-                        if (subtitleResponse.isSuccessful) {
-                            @Suppress("DEPRECATION")
-                            subtitleCallback(com.lagradost.cloudstream3.SubtitleFile("Türkçe", subtitleUrl))
-                            Log.d("FHDF", "Subtitle added: $subtitleUrl")
-                        }
-                    } catch (e: Exception) {
-                        Log.d("FHDF", "Subtitle URL error: ${e.message}")
-                    }
+                    @Suppress("DEPRECATION")
+                    subtitleCallback(com.lagradost.cloudstream3.SubtitleFile("Türkçe", subtitleUrl))
+                    Log.d("FHDF", "Subtitle added: $subtitleUrl")
                 }
 
                 if (iframeSrc.contains("vidpapi.xyz")) {
-                    val videoId = iframeSrc.split("/").lastOrNull() ?: continue
+                    val videoId = iframeSrc.split("/").lastOrNull() ?: return@amap
                     val iframeResponse = app.get(iframeSrc, headers=mapOf(
                         "User-Agent" to headers["User-Agent"]!!,
                         "Referer" to mainUrl

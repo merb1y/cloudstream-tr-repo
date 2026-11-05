@@ -178,7 +178,7 @@ class KoreanTurk : MainAPI() {
         val iframes  = document.select("iframe").mapNotNull { fixUrlNull(it.attr("src").ifBlank { it.attr("data-src") }) }.distinct()
         if (iframes.isEmpty()) return false
 
-        for (iframe in iframes) {
+        iframes.amap { iframe ->
             Log.d("KRT", "iframe » $iframe")
             runCatching {
                 // Kendi oynatıcıları: player.html?v=..&video=/storage/media/<ad>/<ad>.m3u8 → akış = oynatıcı kökü + video

@@ -235,18 +235,22 @@ class DiziBox : MainAPI() {
             fixUrlNull(it.attr("href"))
         }
 
-        val allSeasonDocs = seasonLinks.amap { seasonUrl ->
-            try {
-                app.get(
-                    seasonUrl,
-                    cookies     = baseCookies,
-                    interceptor = interceptor,
-                    cacheTime   = 120
-                ).document
-            } catch (_: Throwable) {
-                null
-            }
-        }.filterNotNull()
+        val allSeasonDocs = if (seasonLinks.size <= 1) {
+            listOf(document)
+        } else {
+            listOf(document) + seasonLinks.drop(1).amap { seasonUrl ->
+                try {
+                    app.get(
+                        seasonUrl,
+                        cookies     = baseCookies,
+                        interceptor = interceptor,
+                        cacheTime   = 120
+                    ).document
+                } catch (_: Throwable) {
+                    null
+                }
+            }.filterNotNull()
+        }
 
         val episodeList = mutableListOf<Episode>()
         allSeasonDocs.forEach { seasonDoc ->
@@ -319,25 +323,30 @@ class DiziBox : MainAPI() {
             .filter { it != data }
             .take(3)
 
-        // Alternatif oynatıcıları (VidMoly vb.) önce tara ki doğrudan çalışan 1080p yayın ilk sırada açılsın
-        altOptions.amap { altUrl ->
-            try {
-                val sourceDoc = app.get(
-                    altUrl,
-                    cookies     = baseCookies,
-                    interceptor = interceptor,
-                    cacheTime   = 60
-                ).document
-
-                val srcIframe = sourceDoc.selectFirst("div#video-area iframe")?.attr("src")
-                if (srcIframe != null) {
-                    processIframe(srcIframe, altUrl, data, subtitleCallback, callback)
-                }
-            } catch (_: Throwable) {}
+        // Ana oynatıcı ve alternatif oynatıcıları (VidMoly vb.) aynı anda paralel tara
+        val jobs = buildList {
+            altOptions.forEach { add("alt" to it) }
+            if (iframeUrl != null) add("main" to iframeUrl)
         }
 
-        if (iframeUrl != null) {
-            processIframe(iframeUrl, data, data, subtitleCallback, callback)
+        jobs.amap { (type, targetUrl) ->
+            try {
+                if (type == "main") {
+                    processIframe(targetUrl, data, data, subtitleCallback, callback)
+                } else {
+                    val sourceDoc = app.get(
+                        targetUrl,
+                        cookies     = baseCookies,
+                        interceptor = interceptor,
+                        cacheTime   = 60
+                    ).document
+
+                    val srcIframe = sourceDoc.selectFirst("div#video-area iframe")?.attr("src")
+                    if (srcIframe != null) {
+                        processIframe(srcIframe, targetUrl, data, subtitleCallback, callback)
+                    }
+                }
+            } catch (_: Throwable) {}
         }
 
         return true
